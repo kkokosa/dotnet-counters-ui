@@ -15,6 +15,17 @@ using ScottPlot.Avalonia;
 
 namespace dotnet_counters_ui
 {
+    /*
+     * https://github.com/AvaloniaCommunity/awesome-avalonia
+     *
+     * TODO:
+     * - XAML component to wrap AvaPlot but accepting "Series" collection with data:
+     *     - provider name/counter name
+     *     - style
+     *     - registers in some central router for updates from specified counters
+     * - a central router that listens to diagnostic session and broadcasts updates
+     * - it will allow to build also other kind of graphs like histograms 
+     */
     public partial class MainWindow : Window
     {
         double[] liveData1 = new double[400];
