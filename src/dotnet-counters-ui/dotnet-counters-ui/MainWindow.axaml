@@ -3,10 +3,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
-        xmlns:ui="clr-namespace:dotnet_counters_ui"
+        xmlns:ui="clr-namespace:DotnetCountersUi"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="dotnet_counters_ui.MainWindow"
-        Title="dotnet_counters_ui">
+        x:Class="DotnetCountersUi.MainWindow"
+        Title="dotnet-counters-ui">
   <StackPanel Background="White"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">

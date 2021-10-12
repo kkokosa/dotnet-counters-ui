@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using System;
 
-namespace dotnet_counters_ui
+namespace DotnetCountersUi
 {
     class Program
     {

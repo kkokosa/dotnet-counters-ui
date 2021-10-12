@@ -13,7 +13,7 @@ using Microsoft.Diagnostics.Tracing.Parsers;
 using ScottPlot;
 using ScottPlot.Avalonia;
 
-namespace dotnet_counters_ui
+namespace DotnetCountersUi
 {
     /*
      * https://github.com/AvaloniaCommunity/awesome-avalonia
@@ -40,11 +40,13 @@ namespace dotnet_counters_ui
 #if DEBUG
             this.AttachDevTools();
 #endif
+            
         }
 
-        private void InitializeComponent()
+        protected override async void OnOpened(EventArgs e)
         {
-            AvaloniaXamlLoader.Load(this);
+            var dialog = new CountersSelectDialog();
+            await dialog.ShowDialog(this);
 
             avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
 
@@ -52,13 +54,22 @@ namespace dotnet_counters_ui
 
             avaPlot1.Plot.AddSignal(liveData2, 1D, Color.DarkOrange, "Gen0");
 
-            var thread = new Thread(CollectRoutine);
-            thread.Start();
+            if (!Design.IsDesignMode)
+            {
+                var thread = new Thread(CollectRoutine);
+                thread.Start();
 
-            _renderTimer = new DispatcherTimer();
-            _renderTimer.Interval = TimeSpan.FromMilliseconds(200);
-            _renderTimer.Tick += Render;
-            _renderTimer.Start();
+                _renderTimer = new DispatcherTimer();
+                _renderTimer.Interval = TimeSpan.FromMilliseconds(200);
+                _renderTimer.Tick += Render;
+                _renderTimer.Start();
+            }
+
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
         }
 
         private void CollectRoutine()
@@ -72,6 +83,7 @@ namespace dotnet_counters_ui
                         { "EventCounterIntervalSec", "1" }
                     })
             };
+            
             var client = new DiagnosticsClient(39104);
             using (var session = client.StartEventPipeSession(providers, false))
             {

@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace dotnet_counters_ui
+namespace DotnetCountersUi
 {
     public class App : Application
     {

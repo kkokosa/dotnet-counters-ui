@@ -5,7 +5,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace dotnet_counters_ui
+namespace DotnetCountersUi
 {
     public partial class CounterGraph : UserControl
     {
