@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Threading;
@@ -28,11 +29,13 @@ namespace DotnetCountersUi
      */
     public partial class MainWindow : Window
     {
+        private int pid;
         double[] liveData1 = new double[400];
         double[] liveData2 = new double[400];
         private AvaPlot avaPlot1;
 
         private DispatcherTimer _renderTimer;
+        private Thread _collectRoutine;
 
         public MainWindow()
         {
@@ -43,10 +46,16 @@ namespace DotnetCountersUi
             
         }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _renderTimer.Stop();
+        }
+
         protected override async void OnOpened(EventArgs e)
         {
             var dialog = new CountersSelectDialog();
-            await dialog.ShowDialog(this);
+            var result = await dialog.ShowDialog<string>(this);
+            pid = int.Parse(result);
 
             avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
 
@@ -56,8 +65,9 @@ namespace DotnetCountersUi
 
             if (!Design.IsDesignMode)
             {
-                var thread = new Thread(CollectRoutine);
-                thread.Start();
+                _collectRoutine = new Thread(CollectRoutine);
+                _collectRoutine.IsBackground = true;
+                _collectRoutine.Start();
 
                 _renderTimer = new DispatcherTimer();
                 _renderTimer.Interval = TimeSpan.FromMilliseconds(200);
@@ -84,7 +94,7 @@ namespace DotnetCountersUi
                     })
             };
             
-            var client = new DiagnosticsClient(39104);
+            var client = new DiagnosticsClient(pid);
             using (var session = client.StartEventPipeSession(providers, false))
             {
                 var source = new EventPipeEventSource(session.EventStream);

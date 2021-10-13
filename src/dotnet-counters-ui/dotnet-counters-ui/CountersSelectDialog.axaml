@@ -2,14 +2,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dotnetCountersUi="clr-namespace:DotnetCountersUi"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="DotnetCountersUi.CountersSelectDialog"
         Width="400" Height="400"
         Title="CountersSelectDialog">
-    <StackPanel Background="White"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
-        <ListBox Items="{Binding ProcessItems}"/>
-        <Button Command="{Binding RunTheThing}">OK</Button>
-    </StackPanel>
+    <Window.DataContext>
+        <dotnetCountersUi:CountersSelectViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <ListBox Items="{Binding ProcessItems}"
+                     SelectionMode="Single"
+                     SelectedItem="{Binding Selected}" />
+            <Button Command="{Binding RunTheThing}">OK</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+        </StackPanel>
+    </Grid>
 </Window>
