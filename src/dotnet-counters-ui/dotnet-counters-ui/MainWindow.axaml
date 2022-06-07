@@ -6,6 +6,7 @@
         xmlns:ui="clr-namespace:DotnetCountersUi"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DotnetCountersUi.MainWindow"
+        WindowStartupLocation="CenterScreen"
         Title="dotnet-counters-ui">
   <StackPanel Background="White"
               HorizontalAlignment="Stretch"
@@ -15,10 +16,10 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"/>
     <ui:CounterGraph
+        GraphId="alloc-rate"
         Height="300"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
-        
     </ui:CounterGraph>
   </StackPanel>
 </Window>

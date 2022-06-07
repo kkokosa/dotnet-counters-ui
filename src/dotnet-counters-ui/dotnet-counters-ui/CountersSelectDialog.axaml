@@ -6,22 +6,26 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="DotnetCountersUi.CountersSelectDialog"
         Width="400" Height="400"
+        WindowStartupLocation="CenterScreen"
         Title="CountersSelectDialog">
     <Window.DataContext>
         <dotnetCountersUi:CountersSelectViewModel/>
     </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel>
-            <ListBox Items="{Binding ProcessItems}"
-                     SelectionMode="Single"
-                     SelectedItem="{Binding Selected}" />
-            <Button Command="{Binding RunTheThing}">OK</Button>
-        </StackPanel>
-        <StackPanel Grid.Column="1">
-        </StackPanel>
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type dotnetCountersUi:CountersProcessViewModel}">
+            <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding PID}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="2,0,2,0" Text="{Binding Name}"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Arguments}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.DataTemplates>
+    <Grid ColumnDefinitions="*" RowDefinitions="*, Auto" Margin="2">
+        <ListBox Items="{Binding ProcessItems}"
+                 SelectionMode="Single"
+                 SelectedItem="{Binding Selected}"
+                 Grid.Row="0" />
+        <Button Command="{Binding RunTheThing}"
+                Grid.Row="1">OK</Button>
     </Grid>
 </Window>

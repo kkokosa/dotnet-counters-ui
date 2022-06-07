@@ -13,6 +13,7 @@ using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 using ScottPlot;
 using ScottPlot.Avalonia;
+using Splat;
 
 namespace DotnetCountersUi
 {
@@ -30,12 +31,10 @@ namespace DotnetCountersUi
     public partial class MainWindow : Window
     {
         private int pid;
-        double[] liveData1 = new double[400];
-        double[] liveData2 = new double[400];
-        private AvaPlot avaPlot1;
-
-        private DispatcherTimer _renderTimer;
+       
+        //private AvaPlot avaPlot1;
         private Thread _collectRoutine;
+        private IDataRouter _router; // TODO: dependency injection
 
         public MainWindow()
         {
@@ -43,36 +42,30 @@ namespace DotnetCountersUi
 #if DEBUG
             this.AttachDevTools();
 #endif
-            
+            _router = Locator.Current.GetService<IDataRouter>();
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            _renderTimer.Stop();
-        }
+        //protected override void OnClosing(CancelEventArgs e)
+        //{
+        //    _renderTimer.Stop();
+        //}
 
         protected override async void OnOpened(EventArgs e)
         {
             var dialog = new CountersSelectDialog();
-            var result = await dialog.ShowDialog<string>(this);
-            pid = int.Parse(result);
+            var result = await dialog.ShowDialog<CountersProcessViewModel>(this);
+            pid = result.PID;
 
-            avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
-
-            var s1 = avaPlot1.Plot.AddSignal(liveData1, 1D, Color.BlueViolet, "Gen0");
-
-            avaPlot1.Plot.AddSignal(liveData2, 1D, Color.DarkOrange, "Gen0");
+            //avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
+            //var s1 = avaPlot1.Plot.AddSignal(liveData1, 1D, Color.BlueViolet, "Gen0");
+            //avaPlot1.Plot.AddSignal(liveData2, 1D, Color.DarkOrange, "Gen0");
 
             if (!Design.IsDesignMode)
             {
-                _collectRoutine = new Thread(CollectRoutine);
-                _collectRoutine.IsBackground = true;
-                _collectRoutine.Start();
-
-                _renderTimer = new DispatcherTimer();
-                _renderTimer.Interval = TimeSpan.FromMilliseconds(200);
-                _renderTimer.Tick += Render;
-                _renderTimer.Start();
+                //_collectRoutine = new Thread(CollectRoutine);
+                //_collectRoutine.IsBackground = true;
+                //_collectRoutine.Start();
+                _router.Start(pid);
             }
 
         }
@@ -80,48 +73,6 @@ namespace DotnetCountersUi
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-        }
-
-        private void CollectRoutine()
-        {
-            var providers = new List<EventPipeProvider>()
-            {
-                new EventPipeProvider("System.Runtime",
-                    EventLevel.Informational,
-                    (long)ClrTraceEventParser.Keywords.None,
-                    new Dictionary<string, string>(){
-                        { "EventCounterIntervalSec", "1" }
-                    })
-            };
-            
-            var client = new DiagnosticsClient(pid);
-            using (var session = client.StartEventPipeSession(providers, false))
-            {
-                var source = new EventPipeEventSource(session.EventStream);
-                source.Dynamic.All += DynamicOnAll;
-                source.Process();
-            }
-        }
-
-        private void DynamicOnAll(TraceEvent obj)
-        {
-            if (obj.EventName.Equals("EventCounters"))
-            {
-                IDictionary<string, object> payloadVal = (IDictionary<string, object>)(obj.PayloadValue(0));
-                IDictionary<string, object> payloadFields = (IDictionary<string, object>)(payloadVal["Payload"]);
-                if (payloadFields["Name"].ToString().Equals("alloc-rate"))
-                {
-                    double allocRate = Double.Parse(payloadFields["Increment"].ToString());
-                    Array.Copy(liveData1, 1, liveData1, 0, liveData1.Length - 1);
-                    liveData1[liveData1.Length - 1] = allocRate;
-                }
-            }
-        }
-
-        void Render(object sender, EventArgs e)
-        {
-            avaPlot1.Plot.AxisAuto();
-            avaPlot1.Refresh();
         }
     }
 }

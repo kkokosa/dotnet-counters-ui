@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using System;
+using Avalonia.ReactiveUI;
 
 namespace DotnetCountersUi
 {
@@ -17,6 +18,7 @@ namespace DotnetCountersUi
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .LogToTrace();
+                .LogToTrace()
+                .UseReactiveUI();
     }
 }

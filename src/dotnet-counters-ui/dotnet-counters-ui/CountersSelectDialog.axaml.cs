@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using JetBrains.Annotations;
 using Microsoft.Diagnostics.NETCore.Client;
 
 namespace DotnetCountersUi
@@ -33,16 +37,16 @@ namespace DotnetCountersUi
 
     public class CountersSelectViewModel : INotifyPropertyChanged
     {
-        public Action<string> CloseAction { get; set; }
+        public Action<CountersProcessViewModel> CloseAction { get; set; }
 
-        private string _selected;
+        private CountersProcessViewModel _selected;
 
-        public IEnumerable<string> ProcessItems
+        public ObservableCollection<CountersProcessViewModel> ProcessItems
         {
-            get => DiagnosticsClient.GetPublishedProcesses().Select(pid => pid.ToString());
+            get => new(DiagnosticsClient.GetPublishedProcesses().Select(pid => new CountersProcessViewModel(pid)));
         }
 
-        public string Selected
+        public CountersProcessViewModel Selected
         {
             get => _selected;
             set
@@ -61,5 +65,29 @@ namespace DotnetCountersUi
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+    }
+
+    public class CountersProcessViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public int PID { get; set; }
+        public string Name { get; set; }
+        public string Arguments { get; set; }
+
+        public CountersProcessViewModel(int pid)
+        {
+            PID = pid;
+            try
+            {
+                var process = Process.GetProcessById(pid);
+                Name = process.ProcessName;
+                Arguments = process.StartInfo.Arguments; // TODO: https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.startinfo does not support this
+            }
+            catch (Exception)
+            {
+
+            }
+        }
     }
 }

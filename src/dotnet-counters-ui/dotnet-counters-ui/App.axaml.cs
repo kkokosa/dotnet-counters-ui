@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Splat;
 
 namespace DotnetCountersUi
 {
@@ -13,11 +14,11 @@ namespace DotnetCountersUi
 
         public override void OnFrameworkInitializationCompleted()
         {
+            Locator.CurrentMutable.RegisterLazySingleton<IDataRouter>(() => new DataRouter());
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
             }
-
             base.OnFrameworkInitializationCompleted();
         }
     }
