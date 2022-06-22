@@ -31,9 +31,19 @@ namespace DotnetCountersUi
             }
         }
 
-        public void Register(string graphId, Action<double> action)
+        public GraphData Register(string graphId, Action<double> action)
         {
+            var series = _series.FirstOrDefault(x => x.Id == graphId);
+            if (series == null)
+            {
+                throw new ArgumentException();
+            }
+
             _registrations.Add(graphId, action);
+            return new GraphData()
+            {
+                Name = series.Name
+            };
         }
 
         private void CollectRoutine(object data)
@@ -78,12 +88,6 @@ namespace DotnetCountersUi
                         }
                     }
                 }
-                //if (.Equals("alloc-rate"))
-                //{
-                //    double allocRate = Double.Parse(payloadFields["Increment"].ToString());
-                    //Array.Copy(liveData1, 1, liveData1, 0, liveData1.Length - 1);
-                    //liveData1[liveData1.Length - 1] = allocRate;
-                //}
             }
         }
 
@@ -96,14 +100,25 @@ namespace DotnetCountersUi
                 Id = "alloc-rate",
                 Name = "Allocation rate",
                 Selector = payload => double.Parse(payload["Increment"].ToString())
+            },
+            new SeriesMetadata()
+            {
+                Id = "cpu-usage",
+                Name = "CPU usage (%)",
+                Selector = payload => double.Parse(payload["Mean"].ToString())
             }
         };
+    }
+
+    public class GraphData
+    {
+        public string Name { get; set; }
     }
 
     public interface IDataRouter
     {
         void Start(int pid);
-        void Register(string graphId, Action<double> action);
+        GraphData Register(string graphId, Action<double> action);
     }
 
     public class SeriesMetadata

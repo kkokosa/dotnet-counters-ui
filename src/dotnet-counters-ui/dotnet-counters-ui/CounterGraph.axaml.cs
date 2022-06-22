@@ -46,10 +46,12 @@ namespace DotnetCountersUi
 
         protected override void OnInitialized()
         {
+            var graphData = _router.Register(GraphId, OnNewData);
+
             _plot = this.Find<AvaPlot>("AvaPlot1");
+            _plot.Plot.Title(graphData.Name);
             _plot.Plot.AddSignal(_data, 1D, Color.DarkOrange, "Gen0");
 
-            _router.Register(GraphId, OnNewData);
 
         }
 

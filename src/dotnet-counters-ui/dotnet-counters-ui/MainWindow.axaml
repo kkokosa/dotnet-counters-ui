@@ -11,15 +11,15 @@
   <StackPanel Background="White"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-      <ScottPlot:AvaPlot Name="AvaPlot1" 
-                         Height="300"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Stretch"/>
     <ui:CounterGraph
-        GraphId="alloc-rate"
-        Height="300"
+        GraphId="cpu-usage" Height="300"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
     </ui:CounterGraph>
+      <ui:CounterGraph
+          GraphId="alloc-rate" Height="300"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+      </ui:CounterGraph>
   </StackPanel>
 </Window>
