@@ -43,7 +43,8 @@ namespace DotnetCountersUi
 
         public ObservableCollection<CountersProcessViewModel> ProcessItems
         {
-            get => new(DiagnosticsClient.GetPublishedProcesses().Select(pid => new CountersProcessViewModel(pid)));
+            get => new(DiagnosticsClient.GetPublishedProcesses().Select(pid => 
+                    new CountersProcessViewModel(pid)).Where(p=>p.PID!=0));
         }
 
         public CountersProcessViewModel Selected
@@ -77,10 +78,11 @@ namespace DotnetCountersUi
 
         public CountersProcessViewModel(int pid)
         {
-            PID = pid;
             try
             {
                 var process = Process.GetProcessById(pid);
+                if (process.Id == 0) return;
+                PID = pid;
                 Name = process.ProcessName;
                 Arguments = process.StartInfo.Arguments; // TODO: https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.startinfo does not support this
             }
