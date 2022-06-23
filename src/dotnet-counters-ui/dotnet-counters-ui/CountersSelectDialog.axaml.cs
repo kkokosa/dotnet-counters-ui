@@ -41,11 +41,10 @@ namespace DotnetCountersUi
 
         private CountersProcessViewModel _selected;
 
-        public ObservableCollection<CountersProcessViewModel> ProcessItems
-        {
-            get => new(DiagnosticsClient.GetPublishedProcesses().Select(pid => 
-                    new CountersProcessViewModel(pid)).Where(p=>p.PID!=0));
-        }
+        public ObservableCollection<CountersProcessViewModel> ProcessItems =>
+            new(DiagnosticsClient.GetPublishedProcesses()
+                .Where(IsProcessOfPidRunning)
+                .Select(p => new CountersProcessViewModel(p)));
 
         public CountersProcessViewModel Selected
         {
@@ -65,6 +64,19 @@ namespace DotnetCountersUi
             CloseAction(_selected);
         }
 
+        private static bool IsProcessOfPidRunning(int processId)
+        {
+            try
+            {
+                Process.GetProcessById(processId);
+                return true;
+            }
+            catch (ArgumentException e) when (e.Message.Contains("is not running"))
+            {
+                return false;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
@@ -78,11 +90,10 @@ namespace DotnetCountersUi
 
         public CountersProcessViewModel(int pid)
         {
+            PID = pid;
             try
             {
                 var process = Process.GetProcessById(pid);
-                if (process.Id == 0) return;
-                PID = pid;
                 Name = process.ProcessName;
                 Arguments = process.StartInfo.Arguments; // TODO: https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.startinfo does not support this
             }
