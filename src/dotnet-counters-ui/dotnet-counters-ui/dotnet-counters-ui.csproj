@@ -13,5 +13,6 @@
     <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.328102" />
     <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.1" />
     <PackageReference Include="ScottPlot.Avalonia" Version="4.1.49" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
    </ItemGroup>
 </Project>
