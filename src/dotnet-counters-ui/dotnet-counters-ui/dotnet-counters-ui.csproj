@@ -15,4 +15,18 @@
     <PackageReference Include="ScottPlot.Avalonia" Version="4.1.49" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\CounterGraph.axaml.cs">
+      <DependentUpon>CounterGraph.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CountersSelectDialog.axaml.cs">
+      <DependentUpon>CountersSelectDialog.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\MainWindow.axaml.cs">
+      <DependentUpon>MainWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
