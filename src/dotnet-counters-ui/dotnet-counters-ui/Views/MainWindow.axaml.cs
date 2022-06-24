@@ -1,22 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.Tracing;
-using System.Drawing;
 using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
 using DotnetCountersUi.ViewModels;
-using Microsoft.Diagnostics.NETCore.Client;
-using Microsoft.Diagnostics.Tracing;
-using Microsoft.Diagnostics.Tracing.Parsers;
-using ScottPlot;
-using ScottPlot.Avalonia;
 using Splat;
 
-namespace DotnetCountersUi
+namespace DotnetCountersUi.Views
 {
     /*
      * https://github.com/AvaloniaCommunity/awesome-avalonia

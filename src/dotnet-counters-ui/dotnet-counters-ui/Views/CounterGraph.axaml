@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-             x:Class="DotnetCountersUi.CounterGraph">
+             x:Class="DotnetCountersUi.Views.CounterGraph">
     <StackPanel Background="White"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">

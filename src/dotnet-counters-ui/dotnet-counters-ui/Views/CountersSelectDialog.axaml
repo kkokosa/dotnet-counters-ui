@@ -5,7 +5,7 @@
         xmlns:dotnetCountersUi="clr-namespace:DotnetCountersUi"
         xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-        x:Class="DotnetCountersUi.CountersSelectDialog"
+        x:Class="DotnetCountersUi.Views.CountersSelectDialog"
         Width="400" Height="400"
         WindowStartupLocation="CenterScreen"
         Title="CountersSelectDialog">

@@ -4,22 +4,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
         xmlns:ui="clr-namespace:DotnetCountersUi"
+        xmlns:views="clr-namespace:DotnetCountersUi.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="DotnetCountersUi.MainWindow"
+        x:Class="DotnetCountersUi.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
         Title="dotnet-counters-ui">
   <StackPanel Background="White"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-    <ui:CounterGraph
+    <views:CounterGraph
         GraphId="cpu-usage" Height="300"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
-    </ui:CounterGraph>
-      <ui:CounterGraph
+    </views:CounterGraph>
+      <views:CounterGraph
           GraphId="alloc-rate" Height="300"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-      </ui:CounterGraph>
+      </views:CounterGraph>
   </StackPanel>
 </Window>

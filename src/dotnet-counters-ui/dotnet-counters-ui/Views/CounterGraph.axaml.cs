@@ -1,16 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using ScottPlot.Avalonia;
 using Splat;
 
-namespace DotnetCountersUi
+namespace DotnetCountersUi.Views
 {
     /* MVVM notes: while I'd love to make this graph control MVVM compatible and store the underlying data
        as CounterGraphViewModel, it's not trivial because of https://scottplot.net/faq/mvvm/.
