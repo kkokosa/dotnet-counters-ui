@@ -8,6 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DotnetCountersUi.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
+        Icon="/Assets/dcu_ico.ico"
         Title="dotnet-counters-ui">
   <StackPanel Background="White"
               HorizontalAlignment="Stretch"

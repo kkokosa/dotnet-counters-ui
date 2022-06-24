@@ -8,6 +8,7 @@
         x:Class="DotnetCountersUi.Views.CountersSelectDialog"
         Width="400" Height="400"
         WindowStartupLocation="CenterScreen"
+        Icon="/Assets/dcu_ico.ico"
         Title="CountersSelectDialog">
     <Window.DataContext>
         <viewModels:CountersSelectViewModel/>

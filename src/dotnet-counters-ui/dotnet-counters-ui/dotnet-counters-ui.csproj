@@ -4,7 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>DotnetCountersUi</RootNamespace>
+    <ApplicationIcon>Assets\dcu_ico.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Assets\dcu_ico.ico" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.15" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.15" />
@@ -16,17 +20,8 @@
     <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
    </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\CounterGraph.axaml.cs">
-      <DependentUpon>CounterGraph.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\CountersSelectDialog.axaml.cs">
-      <DependentUpon>CountersSelectDialog.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\MainWindow.axaml.cs">
-      <DependentUpon>MainWindow.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+    <None Remove=".gitignore" />
   </ItemGroup>
 </Project>
