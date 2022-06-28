@@ -27,6 +27,14 @@ jobs:
       with:
         global-json-file: src/dotnet-counters-ui/global.json
 
+    - name: Configure Linux
+      if: runner.os == 'Linux'
+      run: apt-get install -y libgdiplus
+
+    - name: Configure MacOS
+      if: runner.os == 'MacOS'
+      run: brew install mono-libgdiplus
+
     - name: Restore dependencies
       run: dotnet restore --configuration Release --verbosity minimal src
 
