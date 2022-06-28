@@ -36,10 +36,10 @@ jobs:
       run: brew install mono-libgdiplus
 
     - name: Restore dependencies
-      run: dotnet restore --configuration Release --verbosity minimal src
+      run: dotnet restore --verbosity minimal src/dotnet-counters-ui
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release src
+      run: dotnet build --no-restore --configuration Release src/dotnet-counters-ui
 
     # No tests - no problems! TODO: Enable when there are tests (if any)
     # - name: Test
