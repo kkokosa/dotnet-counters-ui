@@ -1,0 +1,38 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { os: windows-latest }
+          - { os: macOS-latest }
+          - { os: ubuntu-latest }
+
+    runs-on: ${{ matrix.config.os }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        global-json-file: src/dotnet-counters-ui/global.json
+
+    - name: Restore dependencies
+      run: dotnet restore --configuration Release --verbosity minimal src
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release src
+
+    # No tests - no problems! TODO: Enable when there are tests (if any)
+    # - name: Test
+    #   run: dotnet test --no-build --verbosity normal --configuration Release src
