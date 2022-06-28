@@ -43,4 +43,4 @@ jobs:
 
     # No tests - no problems! TODO: Enable when there are tests (if any)
     # - name: Test
-    #   run: dotnet test --no-build --verbosity normal --configuration Release src
+    #   run: dotnet test --no-build --verbosity normal --configuration Release src/dotnet-counters-ui
