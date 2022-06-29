@@ -8,37 +8,30 @@ using Splat;
 
 namespace DotnetCountersUi.ViewModels
 {
-  public class CounterGraphViewModel: ReactiveObject
+  public class CounterGraphViewModel : ReactiveObject
   {
     [Reactive] public IEnumerable<DataPoint> Points { get; set; }
-
-    public string Init
-    {
-      set =>
-        Locator.Current.GetService<IDataRouter>()
-          !.Register(value, OnNewData);
-    }
-
-    private double[] _points = new double[200];
-    
     private readonly IDataRouter? _router = Locator.Current.GetService<IDataRouter>();
+    private double[] _points = new double[200];
 
     public CounterGraphViewModel()
     {
-
     }
-    
-    
+
+    public void Register(string name)
+    {
+      _router!.Register(name, OnNewData);
+    }
+
     private void OnNewData(double value)
     {
       Array.ConstrainedCopy(_points, 1, _points, 0, _points.Length - 1);
       _points[^1] = value;
 
-      var p = 
+      var p =
         new DataPoint[200]
-          .Select((_, i)=>new DataPoint(i/100f, _points[i]));
+          .Select((_, i) => new DataPoint(i / 100f, _points[i]));
       Points = p;
-
     }
   }
 }

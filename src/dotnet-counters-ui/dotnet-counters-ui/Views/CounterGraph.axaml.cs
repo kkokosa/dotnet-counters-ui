@@ -25,7 +25,7 @@ public partial class CounterGraph : ReactiveUserControl<UserControl>
   protected override void OnInitialized()
   {
     var dc = (CounterGraphViewModel?)DataContext;
-    dc!.Init = GraphId;
+    dc!.Register(GraphId);
     var label = this.Find<TextBlock>("Label");
     label.Text = GraphId;
   }
