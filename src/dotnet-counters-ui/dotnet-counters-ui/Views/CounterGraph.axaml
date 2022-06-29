@@ -12,7 +12,7 @@
         <vm:CounterGraphViewModel/>
     </UserControl.DataContext>
     <StackPanel>
-        <TextBlock Name="Label">cpu</TextBlock>
+        <TextBlock Name="Label"/>
         <oxy:Plot Height="150"
                   PlotMargins="50 0 0 0"
                   PlotAreaBorderColor="#999999">
