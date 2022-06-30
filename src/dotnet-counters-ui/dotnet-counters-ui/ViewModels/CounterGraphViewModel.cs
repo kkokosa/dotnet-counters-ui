@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using OxyPlot;
 using ReactiveUI;
@@ -24,7 +23,7 @@ public class CounterGraphViewModel : ReactiveObject
   public CounterGraphViewModel()
   {
     _router = Locator.Current.GetService<IDataRouter>()!;
-    
+
     _points = Enumerable
       .Range(0, 200)
       .Select((_, i) => new DataPoint(i, 0))
@@ -41,7 +40,7 @@ public class CounterGraphViewModel : ReactiveObject
   private void OnNewData(double value)
   {
     Array.ConstrainedCopy(_points, 1, _points, 0, _points.Length - 1);
-    _points[^1]=(new DataPoint(_pointX++, value));
+    _points[^1] = new DataPoint(_pointX++, value);
 
     Points = null!;
     Points = _points;
