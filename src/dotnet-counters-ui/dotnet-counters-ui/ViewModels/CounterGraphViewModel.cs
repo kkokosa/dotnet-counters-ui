@@ -22,8 +22,7 @@ public class CounterGraphViewModel : ReactiveObject
 
   public CounterGraphViewModel()
   {
-    _router = Locator.Current.GetService<IDataRouter>()!
-      ;
+    _router = Locator.Current.GetService<IDataRouter>()!;
     _points = Enumerable
       .Range(0, 200)
       .Select((_, i) => new DataPoint(i, 0))
