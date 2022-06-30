@@ -1,37 +1,48 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using OxyPlot;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 
-namespace DotnetCountersUi.ViewModels
+namespace DotnetCountersUi.ViewModels;
+
+public class CounterGraphViewModel : ReactiveObject
 {
-  public class CounterGraphViewModel : ReactiveObject
+  private readonly IDataRouter _router;
+  private readonly List<DataPoint> _points;
+  private double _pointX;
+
+  private List<DataPoint>? _p;
+
+  public List<DataPoint>? Points
   {
-    [Reactive] public IEnumerable<DataPoint> Points { get; set; }
-    private readonly IDataRouter? _router = Locator.Current.GetService<IDataRouter>();
-    private double[] _points = new double[200];
+    get => _p;
+    set => this.RaiseAndSetIfChanged(ref _p, value);
+  }
 
-    public CounterGraphViewModel()
-    {
-    }
+  public CounterGraphViewModel()
+  {
+    _router = Locator.Current.GetService<IDataRouter>()!
+      ;
+    _points = Enumerable
+      .Range(0, 200)
+      .Select((_, i) => new DataPoint(i, 0))
+      .ToList();
 
-    public void Register(string name)
-    {
-      _router!.Register(name, OnNewData);
-    }
+    _pointX = _points.Count;
+  }
 
-    private void OnNewData(double value)
-    {
-      Array.ConstrainedCopy(_points, 1, _points, 0, _points.Length - 1);
-      _points[^1] = value;
+  public void Register(string name)
+  {
+    _router.Register(name, OnNewData);
+  }
 
-      var p =
-        new DataPoint[200]
-          .Select((_, i) => new DataPoint(i / 100f, _points[i]));
-      Points = p;
-    }
+  private void OnNewData(double value)
+  {
+    _points.RemoveAt(0);
+    _points.Add(new DataPoint(_pointX++, value));
+
+    Points = null!;
+    Points = _points;
   }
 }
