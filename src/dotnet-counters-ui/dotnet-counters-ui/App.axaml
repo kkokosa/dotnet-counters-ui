@@ -3,5 +3,6 @@
              x:Class="DotnetCountersUi.App">
     <Application.Styles>
         <FluentTheme Mode="Light"/>
+        <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia"/>
     </Application.Styles>
 </Application>

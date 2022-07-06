@@ -1,16 +1,29 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:DotnetCountersUi.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-             x:Class="DotnetCountersUi.Views.CounterGraph">
-    <StackPanel Background="White"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
-        <avalonia:AvaPlot Name="AvaPlot1"
-                           Height="300"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"/>
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DotnetCountersUi.Views.CounterGraph"
+>
+
+    <UserControl.DataContext>
+        <vm:CounterGraphViewModel/>
+    </UserControl.DataContext>
+    <StackPanel>
+        <TextBlock Name="Label"/>
+        <oxy:Plot Height="150"
+                  PlotMargins="50 0 0 0"
+                  PlotAreaBorderColor="#999999">
+            <oxy:Plot.Series>
+                <oxy:AreaSeries
+                    Name="OxyArea"
+                    DataFieldX="Index"
+                    DataFieldY="Value"
+                    Items="{Binding Path=Points}"
+                    Color="#fd6d00" />
+            </oxy:Plot.Series>
+        </oxy:Plot>
     </StackPanel>
 </UserControl>
