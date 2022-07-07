@@ -1,8 +1,9 @@
 using System;
-using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
+using DotnetCountersUi.Extensions;
 using DotnetCountersUi.ViewModels;
 using Splat;
 
@@ -19,27 +20,22 @@ namespace DotnetCountersUi.Views
      * - a central router that listens to diagnostic session and broadcasts updates
      * - it will allow to build also other kind of graphs like histograms 
      */
-    public partial class MainWindow : Window
+    public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         private int pid;
-       
-        //private AvaPlot avaPlot1;
-        private Thread _collectRoutine;
-        private IDataRouter _router; // TODO: dependency injection
+        
+        private readonly IDataRouter _router; // TODO: dependency injection
 
         public MainWindow()
         {
             InitializeComponent();
+            ViewModel = new MainWindowViewModel();
+
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _router = Locator.Current.GetService<IDataRouter>();
+            _router = Locator.Current.GetRequiredService<IDataRouter>();
         }
-
-        //protected override void OnClosing(CancelEventArgs e)
-        //{
-        //    _renderTimer.Stop();
-        //}
 
         protected override async void OnOpened(EventArgs e)
         {
@@ -47,18 +43,13 @@ namespace DotnetCountersUi.Views
             var result = await dialog.ShowDialog<CountersProcessViewModel>(this);
             pid = result.PID;
 
-            //avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
-            //var s1 = avaPlot1.Plot.AddSignal(liveData1, 1D, Color.BlueViolet, "Gen0");
-            //avaPlot1.Plot.AddSignal(liveData2, 1D, Color.DarkOrange, "Gen0");
-
             if (!Design.IsDesignMode)
             {
-                //_collectRoutine = new Thread(CollectRoutine);
-                //_collectRoutine.IsBackground = true;
-                //_collectRoutine.Start();
                 _router.Start(pid);
+                
+                ViewModel!.AddAndStartGraph("alloc-rate");
+                ViewModel!.AddAndStartGraph("cpu-usage");
             }
-
         }
 
         private void InitializeComponent()
