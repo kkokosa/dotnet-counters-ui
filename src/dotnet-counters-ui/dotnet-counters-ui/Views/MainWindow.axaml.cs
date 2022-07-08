@@ -3,9 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
-using DotnetCountersUi.Extensions;
 using DotnetCountersUi.ViewModels;
-using Splat;
 
 namespace DotnetCountersUi.Views
 {
@@ -23,8 +21,6 @@ namespace DotnetCountersUi.Views
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         private int pid;
-        
-        private readonly IDataRouter _router; // TODO: dependency injection
 
         public MainWindow()
         {
@@ -34,7 +30,6 @@ namespace DotnetCountersUi.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _router = Locator.Current.GetRequiredService<IDataRouter>();
         }
 
         protected override async void OnOpened(EventArgs e)
@@ -45,10 +40,10 @@ namespace DotnetCountersUi.Views
 
             if (!Design.IsDesignMode)
             {
-                _router.Start(pid);
-                
-                ViewModel!.AddAndStartGraph("alloc-rate");
-                ViewModel!.AddAndStartGraph("cpu-usage");
+                ViewModel!.AttachRouter(pid);
+
+                ViewModel.AddAndStartGraph("cpu-usage");
+                ViewModel.AddAndStartGraph("alloc-rate");
             }
         }
 

@@ -25,4 +25,9 @@ public class MainWindowViewModel : ReactiveObject
         
         vm.Start(graphId);
     }
+
+    public void AttachRouter(int remotePid)
+    {
+        _dataRouter.Start(remotePid);
+    }
 }
