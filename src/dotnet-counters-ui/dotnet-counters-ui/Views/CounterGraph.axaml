@@ -2,26 +2,20 @@
              xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="using:DotnetCountersUi.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="DotnetCountersUi.Views.CounterGraph"
->
-
-    <UserControl.DataContext>
-        <vm:CounterGraphViewModel/>
-    </UserControl.DataContext>
+             xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             d:DataContext="{viewModels:CounterGraphViewModel}"
+             x:Class="DotnetCountersUi.Views.CounterGraph">
     <StackPanel>
-        <TextBlock Name="Label"/>
+        <TextBlock Text="{Binding Name}" />
         <oxy:Plot Height="150"
                   PlotMargins="50 0 0 0"
                   PlotAreaBorderColor="#999999">
             <oxy:Plot.Series>
                 <oxy:AreaSeries
                     Name="OxyArea"
-                    DataFieldX="Index"
-                    DataFieldY="Value"
-                    Items="{Binding Path=Points}"
+                    Items="{Binding Data}"
                     Color="#fd6d00" />
             </oxy:Plot.Series>
         </oxy:Plot>

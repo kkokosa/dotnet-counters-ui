@@ -1,5 +1,9 @@
 using System;
-using System.Linq;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using Avalonia.Threading;
+using DotnetCountersUi.Extensions;
+using DynamicData;
 using OxyPlot;
 using ReactiveUI;
 using Splat;
@@ -8,41 +12,74 @@ namespace DotnetCountersUi.ViewModels;
 
 public class CounterGraphViewModel : ReactiveObject
 {
-  private readonly IDataRouter _router;
-  private readonly DataPoint[] _points;
-  private double _pointX;
+    public string GraphId
+    {
+        get => _graphId;
+        private set => this.RaiseAndSetIfChanged(ref _graphId, value);
+    }
 
-  private DataPoint[]? _p;
+    private string _graphId;
 
-  public DataPoint[]? Points
-  {
-    get => _p;
-    set => this.RaiseAndSetIfChanged(ref _p, value);
-  }
+    public ReadOnlyObservableCollection<DataPoint> Data => _data;
+    private readonly ReadOnlyObservableCollection<DataPoint> _data;
 
-  public CounterGraphViewModel()
-  {
-    _router = Locator.Current.GetService<IDataRouter>()!;
+    private readonly SourceList<DataPoint> _dataSource = new();
 
-    _points = Enumerable
-      .Range(0, 200)
-      .Select((_, i) => new DataPoint(i, 0))
-      .ToArray();
+    private readonly DataPoint[] _dataBuffer;
 
-    _pointX = _points.Length;
-  }
+    public string Name
+    {
+        get => _name;
+        private set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
 
-  public void Register(string name)
-  {
-    _router.Register(name, OnNewData);
-  }
+    private string _name;
 
-  private void OnNewData(double value)
-  {
-    Array.ConstrainedCopy(_points, 1, _points, 0, _points.Length - 1);
-    _points[^1] = new DataPoint(_pointX++, value);
+    private readonly IDataRouter _router;
+    private int _pointX;
 
-    Points = null!;
-    Points = _points;
-  }
+    public CounterGraphViewModel(IDataRouter? router = null)
+    {
+        _router ??= Locator.Current.GetRequiredService<IDataRouter>();
+
+        _dataSource
+            .Connect()
+            .ObserveOn(AvaloniaScheduler.Instance)
+            .Bind(out _data)
+            .Subscribe();
+        
+        _dataBuffer = new DataPoint[200];
+        
+        for (var i = 0; i < _dataBuffer.Length; i++)
+        {
+            _dataBuffer[i] = new DataPoint(i, 0);
+        }
+
+        _pointX = _dataBuffer.Length;
+        
+        _dataSource.AddRange(_dataBuffer);
+    }
+
+    public void Start(string graphId)
+    {
+        if (GraphId != null)
+        {
+            throw new InvalidOperationException("The graph has already been started");
+        }
+        
+        Name = _router.Register(graphId, OnNewData).Name;
+        GraphId = graphId;
+    }
+
+    private void OnNewData(double value)
+    {
+        Array.ConstrainedCopy(_dataBuffer, 1, _dataBuffer, 0, _dataBuffer.Length - 1);
+        _dataBuffer[^1] = new DataPoint(++_pointX, value);
+
+        _dataSource.Edit(state =>
+        {
+            state.Clear();
+            state.AddRange(_dataBuffer);
+        });
+    }
 }
