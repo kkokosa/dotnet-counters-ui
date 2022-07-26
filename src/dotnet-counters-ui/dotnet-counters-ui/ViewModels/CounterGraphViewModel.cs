@@ -40,7 +40,7 @@ public class CounterGraphViewModel : ReactiveObject
 
     public CounterGraphViewModel(IDataRouter? router = null)
     {
-        _router ??= Locator.Current.GetRequiredService<IDataRouter>();
+        _router = router ?? Locator.Current.GetRequiredService<IDataRouter>();
 
         _dataSource
             .Connect()

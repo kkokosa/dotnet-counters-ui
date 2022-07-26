@@ -13,7 +13,7 @@ public class MainWindowViewModel : ReactiveObject
     
     public MainWindowViewModel(IDataRouter? dataRouter = null)
     {
-        _dataRouter ??= Locator.Current.GetRequiredService<IDataRouter>();
+        _dataRouter = dataRouter ?? Locator.Current.GetRequiredService<IDataRouter>();
 
         Counters = new ObservableCollection<CounterGraphViewModel>();
     }
