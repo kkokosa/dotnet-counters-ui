@@ -38,6 +38,8 @@ public class CounterGraphViewModel : ReactiveObject
     public PlotModel Model { get; }
     
     public ReactiveCommand<Unit, Unit> AddCounter { get; }
+    
+    public ReactiveCommand<AddedCounterViewModel, Unit> RemoveCounter { get; }
 
     public CounterGraphViewModel(IDataRouter? router = null)
     {
@@ -50,6 +52,15 @@ public class CounterGraphViewModel : ReactiveObject
         Model.Axes.Add(dateAxis);
 
         AddCounter = ReactiveCommand.CreateFromTask(AddCounterAsync);
+        
+        RemoveCounter = ReactiveCommand.Create((AddedCounterViewModel vm) =>
+        {
+            vm.Subscription.Dispose();
+
+            Model.Series.Remove(vm.Series);
+            
+            _counters.Remove(vm);
+        });
     }
 
     private async Task AddCounterAsync()
@@ -66,8 +77,6 @@ public class CounterGraphViewModel : ReactiveObject
             
         Model.Series.Add(series);
         
-        var vm = new AddedCounterViewModel(counter, series);
-
         var subscription = counter.Data
             .ObserveOn(AvaloniaScheduler.Instance)
             .Subscribe(data =>
@@ -76,6 +85,8 @@ public class CounterGraphViewModel : ReactiveObject
                 
                 Model.InvalidatePlot(true);
             });
+        
+        var vm = new AddedCounterViewModel(counter, series, subscription);
 
         _counters.Add(vm);
     }
@@ -87,9 +98,12 @@ public class AddedCounterViewModel : ReactiveObject
     
     public LineSeries Series { get; }
     
-    public AddedCounterViewModel(ICounter instance, LineSeries series)
+    public IDisposable Subscription { get; }
+
+    public AddedCounterViewModel(ICounter instance, LineSeries series, IDisposable subscription)
     {
         Instance = instance;
         Series = series;
+        Subscription = subscription;
     }
 }

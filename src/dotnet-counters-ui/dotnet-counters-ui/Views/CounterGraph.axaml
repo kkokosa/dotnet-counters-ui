@@ -16,7 +16,8 @@
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" Background="Black" />
         <Border Grid.Row="2" Padding="12">
             <StackPanel>
-                <DataGrid Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
+                <DataGrid Name="CountersGrid"
+                          Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Visible">
                             <DataTemplate DataType="viewModels:AddedCounterViewModel">
@@ -39,11 +40,11 @@
                         +
                     </Button>
                     <Button HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Stretch"
-                            Command="{Binding AddCounter}">
+                            Command="{Binding RemoveCounter}"
+                            CommandParameter="{Binding #CountersGrid.SelectedItem}">
                         -
                     </Button>
                 </Grid>
-
             </StackPanel>
         </Border>
     </Grid>
