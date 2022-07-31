@@ -9,15 +9,7 @@
              x:Class="DotnetCountersUi.Views.CounterGraph">
     <StackPanel>
         <TextBlock Text="{Binding Name}" />
-        <oxy:Plot Height="150"
-                  PlotMargins="50 0 0 0"
-                  PlotAreaBorderColor="#999999">
-            <oxy:Plot.Series>
-                <oxy:AreaSeries
-                    Name="OxyArea"
-                    Items="{Binding Data}"
-                    Color="#fd6d00" />
-            </oxy:Plot.Series>
-        </oxy:Plot>
+        <oxy:PlotView Height="150" Model="{Binding Model}" />
+        <Button Command="{Binding AddCounter}">Add counter</Button>
     </StackPanel>
 </UserControl>

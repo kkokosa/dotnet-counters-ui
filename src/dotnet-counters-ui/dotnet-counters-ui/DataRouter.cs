@@ -46,6 +46,11 @@ namespace DotnetCountersUi
             };
         }
 
+        public void Unregister(string graphId)
+        {
+            _registrations.Remove(graphId);
+        }
+
         private void CollectRoutine(object data)
         {
             var providers = new List<EventPipeProvider>()

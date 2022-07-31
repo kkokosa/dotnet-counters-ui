@@ -22,8 +22,6 @@ public class MainWindowViewModel : ReactiveObject
     {
         var vm = new CounterGraphViewModel(_dataRouter);
         Counters.Add(vm);
-        
-        vm.Start(graphId);
     }
 
     public void AttachRouter(int remotePid)

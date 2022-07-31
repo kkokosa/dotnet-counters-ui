@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using Avalonia.Threading;
+using DotnetCountersUi.Counters;
 using DotnetCountersUi.Extensions;
 using DynamicData;
 using OxyPlot;
+using OxyPlot.Axes;
 using ReactiveUI;
 using Splat;
+using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace DotnetCountersUi.ViewModels;
 
@@ -20,13 +25,6 @@ public class CounterGraphViewModel : ReactiveObject
 
     private string _graphId;
 
-    public ReadOnlyObservableCollection<DataPoint> Data => _data;
-    private readonly ReadOnlyObservableCollection<DataPoint> _data;
-
-    private readonly SourceList<DataPoint> _dataSource = new();
-
-    private readonly DataPoint[] _dataBuffer;
-
     public string Name
     {
         get => _name;
@@ -35,51 +33,47 @@ public class CounterGraphViewModel : ReactiveObject
 
     private string _name;
 
-    private readonly IDataRouter _router;
-    private int _pointX;
+    public ReadOnlyObservableCollection<ICounter> Counters { get; }
+
+    private readonly ObservableCollection<ICounter> _counters = new();
+
+    public PlotModel Model { get; }
+    
+    public ReactiveCommand<Unit, Unit> AddCounter { get; }
 
     public CounterGraphViewModel(IDataRouter? router = null)
     {
-        _router = router ?? Locator.Current.GetRequiredService<IDataRouter>();
+        Counters = new ReadOnlyObservableCollection<ICounter>(_counters);
 
-        _dataSource
-            .Connect()
-            .ObserveOn(AvaloniaScheduler.Instance)
-            .Bind(out _data)
-            .Subscribe();
+        Model = new PlotModel { Title = "My new graph" };
         
-        _dataBuffer = new DataPoint[200];
+        var dateAxis = new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "HH:mm:ss" };
         
-        for (var i = 0; i < _dataBuffer.Length; i++)
+        Model.Axes.Add(dateAxis);
+
+        AddCounter = ReactiveCommand.CreateFromTask(async () =>
         {
-            _dataBuffer[i] = new DataPoint(i, 0);
-        }
+            var (name, type) = await Interactions.ShowAddCounterDialog.Handle(this);
 
-        _pointX = _dataBuffer.Length;
-        
-        _dataSource.AddRange(_dataBuffer);
-    }
+            var counter = (ICounter)Activator.CreateInstance(type)!;
 
-    public void Start(string graphId)
-    {
-        if (GraphId != null)
-        {
-            throw new InvalidOperationException("The graph has already been started");
-        }
-        
-        Name = _router.Register(graphId, OnNewData).Name;
-        GraphId = graphId;
-    }
+            var series = new LineSeries
+            {
+                Title = name
+            };
+            
+            Model.Series.Add(series);
 
-    private void OnNewData(double value)
-    {
-        Array.ConstrainedCopy(_dataBuffer, 1, _dataBuffer, 0, _dataBuffer.Length - 1);
-        _dataBuffer[^1] = new DataPoint(++_pointX, value);
-
-        _dataSource.Edit(state =>
-        {
-            state.Clear();
-            state.AddRange(_dataBuffer);
+            var subscription = counter.Data
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe((data) =>
+            {
+                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data));
+                
+                Model.InvalidatePlot(true);
+            });
+            
+            _counters.Add(counter);
         });
     }
 }
