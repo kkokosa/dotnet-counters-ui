@@ -4,19 +4,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
+             xmlns:converters="clr-namespace:DotnetCountersUi.Converters"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              d:DataContext="{viewModels:CounterGraphViewModel}"
              x:Class="DotnetCountersUi.Views.CounterGraph">
+    <UserControl.Resources>
+        <converters:OxyColorToBrushConverter x:Key="BrushConverter" />
+    </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="{Binding Name}" />
         <oxy:PlotView Height="150" Model="{Binding Model}" />
-        <ListBox Items="{Binding Counters}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="viewModels:AddedCounterViewModel">
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Enabled}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Button Command="{Binding AddCounter}">Add counter</Button>
+        <DataGrid Items="{Binding Counters}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Visible">
+                    <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                        <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding Series.IsVisible}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Color">
+                    <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                        <Rectangle Fill="{Binding Series.Color, Converter={StaticResource BrushConverter}}" Height="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Series.Title}" />
+            </DataGrid.Columns>
+        </DataGrid>
+            <Button Command="{Binding AddCounter}">Add counter</Button>
     </StackPanel>
 </UserControl>

@@ -6,6 +6,7 @@
     <RootNamespace>DotnetCountersUi</RootNamespace>
     <ApplicationIcon>Assets\dcu_ico.ico</ApplicationIcon>
     <LangVersion>default</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Assets\dcu_ico.ico" />

@@ -1,17 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DotnetCountersUi.Counters;
-using DotnetCountersUi.Extensions;
-using DynamicData;
+using DotnetCountersUi.Utils;
 using OxyPlot;
 using OxyPlot.Axes;
 using ReactiveUI;
-using Splat;
 using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace DotnetCountersUi.ViewModels;
@@ -61,35 +58,23 @@ public class CounterGraphViewModel : ReactiveObject
 
         var counter = (ICounter)Activator.CreateInstance(type)!;
 
-        var vm = new AddedCounterViewModel(name, counter, true);
-
         var series = new LineSeries
         {
-            Title = name
+            Title = name,
+            Color = OxyColorUtils.GetRandomOxyColor(),
         };
             
         Model.Series.Add(series);
+        
+        var vm = new AddedCounterViewModel(counter, series);
 
-        IDisposable? subscription = null;
-
-        vm.WhenAnyValue(v => v.Enabled)
-            .Subscribe(val =>
+        var subscription = counter.Data
+            .ObserveOn(AvaloniaScheduler.Instance)
+            .Subscribe(data =>
             {
-                if (!val)
-                {
-                    subscription?.Dispose();
-                }
-                else
-                {
-                    subscription = counter.Data
-                        .ObserveOn(AvaloniaScheduler.Instance)
-                        .Subscribe(data =>
-                        {
-                            series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data));
+                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data));
                 
-                            Model.InvalidatePlot(true);
-                        });
-                }
+                Model.InvalidatePlot(true);
             });
 
         _counters.Add(vm);
@@ -98,21 +83,13 @@ public class CounterGraphViewModel : ReactiveObject
 
 public class AddedCounterViewModel : ReactiveObject
 {
-    public AddedCounterViewModel(string name, ICounter instance, bool enabled)
-    {
-        Name = name;
-        Instance = instance;
-        Enabled = enabled;
-    }
-
-    public string Name { get; }
     public ICounter Instance { get; }
-
-    public bool Enabled
+    
+    public LineSeries Series { get; }
+    
+    public AddedCounterViewModel(ICounter instance, LineSeries series)
     {
-        get => _enabled;
-        set => this.RaiseAndSetIfChanged(ref _enabled, value);
+        Instance = instance;
+        Series = series;
     }
-
-    private bool _enabled;
 }
