@@ -10,6 +10,13 @@
     <StackPanel>
         <TextBlock Text="{Binding Name}" />
         <oxy:PlotView Height="150" Model="{Binding Model}" />
+        <ListBox Items="{Binding Counters}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Enabled}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Button Command="{Binding AddCounter}">Add counter</Button>
     </StackPanel>
 </UserControl>

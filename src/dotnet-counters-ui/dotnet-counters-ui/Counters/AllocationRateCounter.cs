@@ -17,8 +17,8 @@ public class AllocationRateCounter : ICounter
         Data = Observable.Create<double>(observer =>
         {
             router.Register("alloc-rate", observer.OnNext);
-            
-            return () => { };
+
+            return () => router.Unregister("alloc-rate");
         });
     }
 }
