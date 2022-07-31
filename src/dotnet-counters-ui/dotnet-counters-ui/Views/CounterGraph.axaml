@@ -11,24 +11,40 @@
     <UserControl.Resources>
         <converters:OxyColorToBrushConverter x:Key="BrushConverter" />
     </UserControl.Resources>
-    <StackPanel>
-        <TextBlock Text="{Binding Name}" />
-        <oxy:PlotView Height="150" Model="{Binding Model}" />
-        <DataGrid Items="{Binding Counters}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Visible">
-                    <DataTemplate DataType="viewModels:AddedCounterViewModel">
-                        <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding Series.IsVisible}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Color">
-                    <DataTemplate DataType="viewModels:AddedCounterViewModel">
-                        <Rectangle Fill="{Binding Series.Color, Converter={StaticResource BrushConverter}}" Height="2" VerticalAlignment="Center"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Series.Title}" />
-            </DataGrid.Columns>
-        </DataGrid>
-            <Button Command="{Binding AddCounter}">Add counter</Button>
-    </StackPanel>
+    <Grid RowDefinitions="Auto, Auto, *">
+        <oxy:PlotView Grid.Row="0" MinHeight="150" Model="{Binding Model}" />
+        <GridSplitter Grid.Row="1" ResizeDirection="Rows" Background="Black" />
+        <Border Grid.Row="2" Padding="12">
+            <StackPanel>
+                <DataGrid Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Visible">
+                            <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          IsChecked="{Binding Series.IsVisible}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Color">
+                            <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                                <Rectangle Fill="{Binding Series.Color, Converter={StaticResource BrushConverter}}"
+                                           Height="2" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Series.Title}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid ColumnDefinitions="50, 50">
+                    <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                            Command="{Binding AddCounter}">
+                        +
+                    </Button>
+                    <Button HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Stretch"
+                            Command="{Binding AddCounter}">
+                        -
+                    </Button>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
