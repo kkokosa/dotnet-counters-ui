@@ -5,10 +5,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DotnetCountersUi.Counters;
+using DotnetCountersUi.Extensions;
 using DotnetCountersUi.Utils;
 using OxyPlot;
 using OxyPlot.Axes;
 using ReactiveUI;
+using Splat;
 using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace DotnetCountersUi.ViewModels;
@@ -25,8 +27,12 @@ public class CounterGraphViewModel : ReactiveObject
     
     public ReactiveCommand<AddedCounterViewModel, Unit> RemoveCounter { get; }
 
+    private readonly IDataRouter _dataRouter;
+
     public CounterGraphViewModel(IDataRouter? router = null)
     {
+        _dataRouter = router ?? Locator.Current.GetRequiredService<IDataRouter>();
+        
         Counters = new ReadOnlyObservableCollection<AddedCounterViewModel>(_counters);
 
         Model = new PlotModel { Title = "My new graph" };
@@ -51,7 +57,7 @@ public class CounterGraphViewModel : ReactiveObject
     {
         var (name, type) = await Interactions.ShowAddCounterDialog.Handle(this);
 
-        var counter = (ICounter)Activator.CreateInstance(type)!;
+        var counter = (ICounter)Activator.CreateInstance(type, _dataRouter)!;
 
         var series = new LineSeries
         {

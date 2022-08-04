@@ -10,9 +10,9 @@ public class AllocationRateCounter : ICounter
 {
     public IObservable<double> Data { get; }
 
-    public AllocationRateCounter()
+    public AllocationRateCounter(IDataRouter? router)
     {
-        var router = Locator.Current.GetRequiredService<IDataRouter>();
+        router ??= Locator.Current.GetRequiredService<IDataRouter>();
 
         Data = Observable.Create<double>(observer =>
         {

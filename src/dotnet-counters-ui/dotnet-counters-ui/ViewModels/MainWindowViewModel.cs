@@ -20,7 +20,7 @@ public class MainWindowViewModel : ReactiveObject
 
         Graphs = new ObservableCollection<CounterGraphViewModel>();
 
-        AddNewGraph = ReactiveCommand.Create(() => Graphs.Add(new CounterGraphViewModel(_dataRouter)));
+        AddNewGraph = ReactiveCommand.Create(() => Graphs.Add(new CounterGraphViewModel()));
     }
 
     public void AttachRouter(int remotePid)
