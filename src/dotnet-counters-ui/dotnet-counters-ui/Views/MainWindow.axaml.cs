@@ -48,8 +48,6 @@ namespace DotnetCountersUi.Views
             if (!Design.IsDesignMode)
             {
                 ViewModel!.AttachRouter(pid);
-
-                ViewModel.AddAndStartGraph("cpu-usage");
             }
         }
 

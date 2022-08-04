@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Reactive;
 using DotnetCountersUi.Extensions;
 using ReactiveUI;
 using Splat;
@@ -7,7 +8,9 @@ namespace DotnetCountersUi.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    public ObservableCollection<CounterGraphViewModel> Counters { get; }
+    public ObservableCollection<CounterGraphViewModel> Graphs { get; }
+    
+    public ReactiveCommand<Unit, Unit> AddNewGraph { get; }
 
     private readonly IDataRouter _dataRouter;
     
@@ -15,13 +18,9 @@ public class MainWindowViewModel : ReactiveObject
     {
         _dataRouter = dataRouter ?? Locator.Current.GetRequiredService<IDataRouter>();
 
-        Counters = new ObservableCollection<CounterGraphViewModel>();
-    }
+        Graphs = new ObservableCollection<CounterGraphViewModel>();
 
-    public void AddAndStartGraph(string graphId)
-    {
-        var vm = new CounterGraphViewModel(_dataRouter);
-        Counters.Add(vm);
+        AddNewGraph = ReactiveCommand.Create(() => Graphs.Add(new CounterGraphViewModel(_dataRouter)));
     }
 
     public void AttachRouter(int remotePid)

@@ -11,11 +11,19 @@
                      WindowStartupLocation="CenterScreen"
                      Icon="/Assets/dcu_ico.ico"
                      Title="dotnet-counters-ui">
-    <ItemsControl Items="{Binding Counters}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <views:CounterGraph DataContext="{Binding Path=.}" />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Graph">
+                <MenuItem Header="_New" Command="{Binding AddNewGraph}" />
+            </MenuItem>
+        </Menu>
+        <ItemsControl Items="{Binding Graphs}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <views:CounterGraph DataContext="{Binding Path=.}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+    
 </rxui:ReactiveWindow>
