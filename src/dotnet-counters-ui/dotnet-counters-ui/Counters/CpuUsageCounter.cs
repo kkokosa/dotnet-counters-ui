@@ -10,7 +10,7 @@ public class CpuUsageCounter : ICounter
 {
     public IObservable<double> Data { get; }
 
-    public CpuUsageCounter(IDataRouter router)
+    public CpuUsageCounter(IDataRouter? router)
     {
         router ??= Locator.Current.GetRequiredService<IDataRouter>();
 
