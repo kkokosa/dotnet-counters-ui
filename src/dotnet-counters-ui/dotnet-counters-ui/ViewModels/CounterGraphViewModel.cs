@@ -15,22 +15,6 @@ namespace DotnetCountersUi.ViewModels;
 
 public class CounterGraphViewModel : ReactiveObject
 {
-    public string GraphId
-    {
-        get => _graphId;
-        private set => this.RaiseAndSetIfChanged(ref _graphId, value);
-    }
-
-    private string _graphId;
-
-    public string Name
-    {
-        get => _name;
-        private set => this.RaiseAndSetIfChanged(ref _name, value);
-    }
-
-    private string _name;
-
     public ReadOnlyObservableCollection<AddedCounterViewModel> Counters { get; }
 
     private readonly ObservableCollection<AddedCounterViewModel> _counters = new();
