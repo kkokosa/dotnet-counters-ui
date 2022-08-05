@@ -62,7 +62,7 @@ public class CounterGraphViewModel : ReactiveObject
         var series = new LineSeries
         {
             Title = name,
-            Color = OxyColorUtils.GetRandomOxyColor(),
+            Color = OxyColorUtils.GetNextQualitativeColor(),
         };
             
         Model.Series.Add(series);
