@@ -55,7 +55,11 @@ public class CounterGraphViewModel : ReactiveObject
 
     private async Task AddCounterAsync()
     {
-        var (name, type) = await Interactions.ShowAddCounterDialog.Handle(this);
+        var counterDescriptor = await Interactions.ShowAddCounterDialog.Handle(this);
+
+        if (counterDescriptor == null) return;
+
+        var (name, type) = counterDescriptor;
 
         var counter = (ICounter)Activator.CreateInstance(type, _dataRouter)!;
 
