@@ -15,7 +15,8 @@
     </Window.DataContext>
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:CounterDescriptorViewModel}">
-            <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2">
+            <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2"
+                  DoubleTapped="CounterItem_OnDoubleTapped">
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
             </Grid>
         </DataTemplate>
