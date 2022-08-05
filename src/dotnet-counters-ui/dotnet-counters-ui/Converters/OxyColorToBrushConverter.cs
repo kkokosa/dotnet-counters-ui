@@ -9,10 +9,13 @@ namespace DotnetCountersUi.Converters;
 public class OxyColorToBrushConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        var oxyColor = (OxyColor) (value ?? throw new ArgumentNullException(nameof(value)));
-        return oxyColor.ToBrush();
-    }
+        => value switch
+        {
+            OxyColor color => color.ToBrush(),
+            { } => throw new ArgumentException($"Unsupported argument of type {value.GetType()}.",
+                nameof(value)),
+            null => throw new ArgumentNullException(nameof(value)),
+        };
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
