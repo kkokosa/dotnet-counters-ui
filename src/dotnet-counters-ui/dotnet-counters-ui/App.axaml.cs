@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -10,6 +11,8 @@ namespace DotnetCountersUi
     {
         public override void Initialize()
         {
+            // https://github.com/codingseb/Avalonia.EventSetter#getting-started
+            GC.KeepAlive(typeof(Avalonia.Styling.EventSetter).Assembly);
             AvaloniaXamlLoader.Load(this);
         }
 

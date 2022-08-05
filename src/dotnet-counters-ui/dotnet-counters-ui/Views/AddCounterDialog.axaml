@@ -15,17 +15,20 @@
     </Window.DataContext>
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:CounterDescriptorViewModel}">
-            <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2"
-                  DoubleTapped="CounterItem_OnDoubleTapped">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
-            </Grid>
+            <TextBlock Text="{Binding Name}"/>
         </DataTemplate>
     </Window.DataTemplates>
     <Grid ColumnDefinitions="*" RowDefinitions="*, Auto" Margin="2">
         <ListBox Items="{Binding AvailableCounters}"
                  SelectionMode="Single"
                  SelectedItem="{Binding Selected}"
-                 Grid.Row="0" />
+                 Grid.Row="0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <EventSetter Event="DoubleTapped" Handler="CounterItem_OnDoubleTapped" />
+                </Style>
+            </ListBox.Styles>
+        </ListBox>
         <Button Command="{Binding CloseDialog}"
                 CommandParameter="{Binding ElementName=Window}"
                 Grid.Row="1">OK</Button>
