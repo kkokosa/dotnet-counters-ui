@@ -27,7 +27,7 @@ public class AddCounterViewModel : ReactiveObject
     {
         AvailableCounters = Assembly.GetExecutingAssembly()
             .GetTypes()
-            .Where(t => t.IsAssignableTo(typeof(ICounter)) && t.IsClass && !t.IsAbstract)
+            .Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeof(ICounter)))
             .Select(t =>
             {
                 var attribute = t.GetCustomAttribute<CounterAttribute>()
