@@ -41,7 +41,8 @@
                     </Button>
                     <Button HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Stretch"
                             Command="{Binding RemoveCounter}"
-                            CommandParameter="{Binding #CountersGrid.SelectedItem}">
+                            CommandParameter="{Binding #CountersGrid.SelectedItem}"
+                            IsEnabled="{Binding #CountersGrid.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
                         -
                     </Button>
                 </Grid>
