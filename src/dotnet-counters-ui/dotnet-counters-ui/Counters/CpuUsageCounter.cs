@@ -18,7 +18,7 @@ public class CpuUsageCounter : ICounter
         {
             router.Register("cpu-usage", observer.OnNext);
 
-            return () => router.Unregister("cpu-usage");
+            return () => router.Unregister("cpu-usage", observer.OnNext);
         });
     }
 }

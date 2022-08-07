@@ -18,7 +18,7 @@ public class AllocationRateCounter : ICounter
         {
             router.Register("alloc-rate", observer.OnNext);
 
-            return () => router.Unregister("alloc-rate");
+            return () => router.Unregister("alloc-rate", observer.OnNext);
         });
     }
 }
