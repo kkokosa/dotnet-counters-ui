@@ -49,6 +49,8 @@ public class CounterGraphViewModel : ReactiveObject
 
             Model.Series.Remove(vm.Series);
             
+            Model.InvalidatePlot(false);
+
             _counters.Remove(vm);
         });
     }
