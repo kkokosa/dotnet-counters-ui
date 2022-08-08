@@ -4,20 +4,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
+             xmlns:converters="clr-namespace:DotnetCountersUi.Converters"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              d:DataContext="{viewModels:CounterGraphViewModel}"
              x:Class="DotnetCountersUi.Views.CounterGraph">
-    <StackPanel>
-        <TextBlock Text="{Binding Name}" />
-        <oxy:Plot Height="150"
-                  PlotMargins="50 0 0 0"
-                  PlotAreaBorderColor="#999999">
-            <oxy:Plot.Series>
-                <oxy:AreaSeries
-                    Name="OxyArea"
-                    Items="{Binding Data}"
-                    Color="#fd6d00" />
-            </oxy:Plot.Series>
-        </oxy:Plot>
-    </StackPanel>
+    <UserControl.Resources>
+        <converters:OxyColorToBrushConverter x:Key="BrushConverter" />
+    </UserControl.Resources>
+    <Grid RowDefinitions="Auto, Auto, *">
+        <oxy:PlotView Grid.Row="0" MinHeight="150" Model="{Binding Model}" />
+        <GridSplitter Grid.Row="1" ResizeDirection="Rows" Background="Black" />
+        <Border Grid.Row="2" Padding="12">
+            <StackPanel>
+                <DataGrid Name="CountersGrid"
+                          Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Visible">
+                            <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          IsChecked="{Binding Series.IsVisible}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Color">
+                            <DataTemplate DataType="viewModels:AddedCounterViewModel">
+                                <Rectangle Fill="{Binding Series.Color, Converter={StaticResource BrushConverter}}"
+                                           Height="2" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Series.Title}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid ColumnDefinitions="50, 50">
+                    <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                            Command="{Binding AddCounter}">
+                        +
+                    </Button>
+                    <Button HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Stretch"
+                            Command="{Binding RemoveCounter}"
+                            CommandParameter="{Binding #CountersGrid.SelectedItem}"
+                            IsEnabled="{Binding #CountersGrid.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        -
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

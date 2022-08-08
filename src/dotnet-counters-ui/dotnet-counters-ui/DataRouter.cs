@@ -39,11 +39,22 @@ namespace DotnetCountersUi
                 throw new ArgumentException();
             }
 
-            _registrations.Add(graphId, action);
-            return new GraphData()
+            if (!_registrations.ContainsKey(graphId))
+            {
+                _registrations[graphId] = new List<Action<double>>();
+            }
+
+            _registrations[graphId].Add(action);
+
+            return new GraphData
             {
                 Name = series.Name
             };
+        }
+
+        public void Unregister(string graphId, Action<double> action)
+        {
+            _registrations[graphId].Remove(action);
         }
 
         private void CollectRoutine(object data)
@@ -84,14 +95,17 @@ namespace DotnetCountersUi
                         if (registration.Key == name)
                         {
                             var value = metadata.Selector(payloadFields);
-                            registration.Value(value);
+                            foreach (var listener in registration.Value)
+                            {
+                                listener(value);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private Dictionary<string, Action<double>> _registrations = new();
+        private readonly Dictionary<string, List<Action<double>>> _registrations = new();
 
         private List<SeriesMetadata> _series = new List<SeriesMetadata>()
         {

@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+        Width="400" Height="400"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/dcu_ico.ico"
+        x:Class="DotnetCountersUi.Views.AddCounterDialog"
+        Title="Add a counter"
+        x:Name="Window">
+    <Window.DataContext>
+        <viewModels:AddCounterViewModel />
+    </Window.DataContext>
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type viewModels:CounterDescriptorViewModel}">
+            <TextBlock Text="{Binding Name}"/>
+        </DataTemplate>
+    </Window.DataTemplates>
+    <Grid ColumnDefinitions="*" RowDefinitions="*, Auto" Margin="2">
+        <ListBox Items="{Binding AvailableCounters}"
+                 SelectionMode="Single"
+                 SelectedItem="{Binding Selected}"
+                 Grid.Row="0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <EventSetter Event="DoubleTapped" Handler="CounterItem_OnDoubleTapped" />
+                </Style>
+            </ListBox.Styles>
+        </ListBox>
+        <Button Command="{Binding CloseDialog}"
+                CommandParameter="{Binding ElementName=Window}"
+                Grid.Row="1">OK</Button>
+    </Grid>
+</Window>

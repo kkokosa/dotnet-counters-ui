@@ -30,6 +30,13 @@ namespace DotnetCountersUi.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+
+            Interactions.ShowAddCounterDialog.RegisterHandler(async ctx =>
+            {
+                var dialog = new AddCounterDialog();
+
+                ctx.SetOutput(await dialog.ShowDialog<CounterDescriptorViewModel>(this));
+            });
         }
 
         protected override async void OnOpened(EventArgs e)
@@ -41,9 +48,6 @@ namespace DotnetCountersUi.Views
             if (!Design.IsDesignMode)
             {
                 ViewModel!.AttachRouter(pid);
-
-                ViewModel.AddAndStartGraph("cpu-usage");
-                ViewModel.AddAndStartGraph("alloc-rate");
             }
         }
 
