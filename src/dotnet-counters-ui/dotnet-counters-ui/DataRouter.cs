@@ -31,12 +31,18 @@ namespace DotnetCountersUi
             }
         }
 
-        public GraphData Register(string graphId, Action<double> action)
+        public GraphData Register(string graphId, string displayName, string counterDataType, Action<double> action)
         {
             var series = _series.FirstOrDefault(x => x.Id == graphId);
             if (series == null)
             {
-                throw new ArgumentException();
+                series = new SeriesMetadata()
+                {
+                    Id = graphId,
+                    Name = displayName,
+                    Selector = payload => double.Parse(payload[counterDataType].ToString())
+                };
+                _series.Add(series);
             }
 
             if (!_registrations.ContainsKey(graphId))
@@ -107,20 +113,6 @@ namespace DotnetCountersUi
 
         private readonly Dictionary<string, List<Action<double>>> _registrations = new();
 
-        private List<SeriesMetadata> _series = new List<SeriesMetadata>()
-        {
-            new SeriesMetadata()
-            {
-                Id = "alloc-rate",
-                Name = "Allocation rate",
-                Selector = payload => double.Parse(payload["Increment"].ToString())
-            },
-            new SeriesMetadata()
-            {
-                Id = "cpu-usage",
-                Name = "CPU usage (%)",
-                Selector = payload => double.Parse(payload["Mean"].ToString())
-            }
-        };
+        private List<SeriesMetadata> _series = new List<SeriesMetadata>();
     }
 }

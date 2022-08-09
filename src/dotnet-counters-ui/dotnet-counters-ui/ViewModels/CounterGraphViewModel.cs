@@ -35,7 +35,7 @@ public class CounterGraphViewModel : ReactiveObject
         
         Counters = new ReadOnlyObservableCollection<AddedCounterViewModel>(_counters);
 
-        Model = new PlotModel { Title = "My new graph" };
+        Model = new PlotModel { Title = "(unnamed)" };
         
         var dateAxis = new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "HH:mm:ss" };
         
