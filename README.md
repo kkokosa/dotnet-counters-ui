@@ -2,11 +2,6 @@
 
 Cross-platform UI tool for observing .NET counters, like it was possible on Windows with *Performance Counters* and *Performance Monitor* in .NET Framework times.
 
-# Installation dependencies for Linux & MacOS
-Non Windows system require install **libgdiplus**
-
-Linux:
-> apt-get install -y libgdiplus
-
-MacOS:
-> brew install mono-libgdiplus
+| Windows | Linux |
+| ------ | ------ | 
+| ![windows](docs/dotnet-counters-ui02.png) | ![linux](docs/dotnet-counters-ui03.png) |
