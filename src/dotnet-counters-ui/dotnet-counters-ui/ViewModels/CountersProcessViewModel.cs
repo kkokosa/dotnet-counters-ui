@@ -1,30 +1,16 @@
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
+using ReactiveUI;
 
-namespace DotnetCountersUi.ViewModels
+namespace DotnetCountersUi.ViewModels;
+
+public class CountersProcessViewModel : ReactiveObject
 {
-  public class CountersProcessViewModel : INotifyPropertyChanged
-  {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public int Pid { get; }
+    public string Name { get; }
 
-    public int PID { get; set; }
-    public string Name { get; set; }
-    public string Arguments { get; set; }
-
-    public CountersProcessViewModel(int pid)
+    public CountersProcessViewModel(Process p)
     {
-      PID = pid;
-      try
-      {
-        var process = Process.GetProcessById(pid);
-        Name = process.ProcessName;
-        Arguments = process.StartInfo.Arguments; // TODO: https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.startinfo does not support this
-      }
-      catch (Exception)
-      {
-
-      }
+        Pid = p.Id;
+        Name = p.ProcessName;
     }
-  }
 }

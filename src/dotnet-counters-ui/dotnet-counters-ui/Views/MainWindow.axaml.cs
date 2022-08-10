@@ -41,9 +41,9 @@ namespace DotnetCountersUi.Views
 
         protected override async void OnOpened(EventArgs e)
         {
-            var dialog = new CountersSelectDialog();
+            var dialog = new ProcessSelectDialog();
             var result = await dialog.ShowDialog<CountersProcessViewModel>(this);
-            pid = result.PID;
+            pid = result.Pid;
 
             if (!Design.IsDesignMode)
             {
