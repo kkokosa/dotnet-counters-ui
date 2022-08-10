@@ -6,19 +6,10 @@ using Splat;
 namespace DotnetCountersUi.Counters;
 
 [Counter("CPU Usage (%)")]
-public class CpuUsageCounter : ICounter
+public class CpuUsageCounter : EventCountersBaseCounter
 {
-    public IObservable<double> Data { get; }
-
     public CpuUsageCounter(IDataRouter? router)
+        : base(router, "cpu-usage", "CPU Usage (%)", "Mean")
     {
-        router ??= Locator.Current.GetRequiredService<IDataRouter>();
-
-        Data = Observable.Create<double>(observer =>
-        {
-            router.Register("cpu-usage", observer.OnNext);
-
-            return () => router.Unregister("cpu-usage", observer.OnNext);
-        });
     }
 }
