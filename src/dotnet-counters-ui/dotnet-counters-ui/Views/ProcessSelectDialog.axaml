@@ -2,21 +2,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:dotnetCountersUi="clr-namespace:DotnetCountersUi"
         xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-        x:Class="DotnetCountersUi.Views.CountersSelectDialog"
+        x:Class="DotnetCountersUi.Views.ProcessSelectDialog"
         Width="400" Height="400"
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/dcu_ico.ico"
         Title="CountersSelectDialog">
     <Window.DataContext>
-        <viewModels:CountersSelectViewModel/>
+        <viewModels:ProcessSelectViewModel/>
     </Window.DataContext>
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:CountersProcessViewModel}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding PID}"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Pid}"/>
                 <TextBlock Grid.Row="0" Grid.Column="1" Margin="2,0,2,0" Text="{Binding Name}"/>
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Arguments}"/>
             </Grid>
@@ -26,8 +25,14 @@
         <ListBox Items="{Binding ProcessItems}"
                  SelectionMode="Single"
                  SelectedItem="{Binding Selected}"
-                 Grid.Row="0" />
-        <Button Command="{Binding RunTheThing}"
+                 Grid.Row="0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <EventSetter Event="DoubleTapped" Handler="ProcessItem_OnDoubleTapped" />
+                </Style>
+            </ListBox.Styles>
+        </ListBox>
+        <Button Command="{Binding CloseDialog}"
                 Grid.Row="1">OK</Button>
     </Grid>
 </Window>
