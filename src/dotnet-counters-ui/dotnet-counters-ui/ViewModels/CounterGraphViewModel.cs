@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Data;
 using Avalonia.Threading;
 using DotnetCountersUi.Counters;
 using DotnetCountersUi.Extensions;
@@ -89,14 +90,20 @@ public class AddedCounterViewModel : ReactiveObject, IDisposable
     public float Scale
     {
         get => _scale;
-        set => this.RaiseAndSetIfChanged(ref _scale, value);
+        set
+        {
+            if (value <= 0)
+                throw new DataValidationException($"{nameof(Scale)} must be positive");
+
+            this.RaiseAndSetIfChanged(ref _scale, value);
+        }
     }
 
     private float _scale = 1;
 
     private readonly CompositeDisposable _disposable = new();
 
-    private readonly ObservableCollection<DataPoint> _points = new();
+    private readonly ObservableCollection<MeasurePoint> _points = new();
 
     public AddedCounterViewModel(ICounter instance, LineSeries series)
     {
@@ -104,27 +111,23 @@ public class AddedCounterViewModel : ReactiveObject, IDisposable
         Series = series;
 
         Series.ItemsSource = _points;
+        Series.TrackerFormatString = "X: {Timestamp:T}\nY: {Y}";
 
         instance.Data
             .ObserveOn(AvaloniaScheduler.Instance)
             .Subscribe(data =>
             {
-                _points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data * Scale));
+                var point = new MeasurePoint(DateTime.Now, data, _scale);
+                _points.Add(point);
 
                 series.PlotModel.InvalidatePlot(true);
             })
             .DisposeWith(_disposable);
 
         this.WhenAnyValue(vm => vm.Scale)
-            .Subscribe(scale =>
+            .Subscribe(_ =>
             {
-                series.Mapping = p =>
-                {
-                    var dp = (DataPoint) p;
-                    return new DataPoint(dp.X, dp.Y * scale);
-                };
-
-                series.PlotModel.InvalidatePlot(false);
+                _points.Clear();
             })
             .DisposeWith(_disposable);
     }
@@ -132,5 +135,24 @@ public class AddedCounterViewModel : ReactiveObject, IDisposable
     public void Dispose()
     {
         _disposable.Dispose();
+    }
+}
+
+public class MeasurePoint : IDataPointProvider
+{
+    public MeasurePoint(DateTime timestamp, double y, float scale)
+    {
+        Timestamp = timestamp;
+        Y = y;
+        Scale = scale;
+    }
+
+    public DateTime Timestamp { get; }
+    public double Y { get; }
+    public float Scale { get; }
+
+    public DataPoint GetDataPoint()
+    {
+        return new DataPoint(DateTimeAxis.ToDouble(Timestamp), Y * Scale);
     }
 }
