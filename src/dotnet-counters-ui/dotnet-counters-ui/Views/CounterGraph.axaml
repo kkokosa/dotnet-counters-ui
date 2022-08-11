@@ -32,6 +32,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Name" Binding="{Binding Series.Title}" />
+                        <DataGridTextColumn Header="Scale" Binding="{Binding Scale}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid ColumnDefinitions="50, 50">

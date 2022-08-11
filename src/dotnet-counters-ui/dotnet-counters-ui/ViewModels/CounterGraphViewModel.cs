@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -45,7 +46,7 @@ public class CounterGraphViewModel : ReactiveObject
         
         RemoveCounter = ReactiveCommand.Create((AddedCounterViewModel vm) =>
         {
-            vm.Subscription.Dispose();
+            vm.Dispose();
 
             Model.Series.Remove(vm.Series);
             
@@ -73,33 +74,63 @@ public class CounterGraphViewModel : ReactiveObject
             
         Model.Series.Add(series);
         
-        var subscription = counter.Data
-            .ObserveOn(AvaloniaScheduler.Instance)
-            .Subscribe(data =>
-            {
-                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data));
-                
-                Model.InvalidatePlot(true);
-            });
-        
-        var vm = new AddedCounterViewModel(counter, series, subscription);
+        var vm = new AddedCounterViewModel(counter, series);
 
         _counters.Add(vm);
     }
 }
 
-public class AddedCounterViewModel : ReactiveObject
+public class AddedCounterViewModel : ReactiveObject, IDisposable
 {
     public ICounter Instance { get; }
     
     public LineSeries Series { get; }
     
-    public IDisposable Subscription { get; }
+    public float Scale
+    {
+        get => _scale;
+        set => this.RaiseAndSetIfChanged(ref _scale, value);
+    }
 
-    public AddedCounterViewModel(ICounter instance, LineSeries series, IDisposable subscription)
+    private float _scale = 1;
+
+    private readonly CompositeDisposable _disposable = new();
+
+    private readonly ObservableCollection<DataPoint> _points = new();
+
+    public AddedCounterViewModel(ICounter instance, LineSeries series)
     {
         Instance = instance;
         Series = series;
-        Subscription = subscription;
+
+        Series.ItemsSource = _points;
+
+        instance.Data
+            .ObserveOn(AvaloniaScheduler.Instance)
+            .Subscribe(data =>
+            {
+                _points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data * Scale));
+
+                series.PlotModel.InvalidatePlot(true);
+            })
+            .DisposeWith(_disposable);
+
+        this.WhenAnyValue(vm => vm.Scale)
+            .Subscribe(scale =>
+            {
+                series.Mapping = p =>
+                {
+                    var dp = (DataPoint) p;
+                    return new DataPoint(dp.X, dp.Y * scale);
+                };
+
+                series.PlotModel.InvalidatePlot(false);
+            })
+            .DisposeWith(_disposable);
+    }
+
+    public void Dispose()
+    {
+        _disposable.Dispose();
     }
 }
