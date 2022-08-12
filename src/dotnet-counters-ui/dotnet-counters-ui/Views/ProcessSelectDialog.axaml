@@ -5,6 +5,7 @@
         xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="DotnetCountersUi.Views.ProcessSelectDialog"
+        x:Name="Window"
         Width="400" Height="400"
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/dcu_ico.ico"
@@ -33,6 +34,8 @@
             </ListBox.Styles>
         </ListBox>
         <Button Command="{Binding CloseDialog}"
+                CommandParameter="{Binding ElementName=Window}"
+                IsEnabled="{Binding Selected, Converter={x:Static ObjectConverters.IsNotNull}}"
                 Grid.Row="1">OK</Button>
     </Grid>
 </Window>
