@@ -1,8 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Data;
 using Avalonia.Threading;
 using DotnetCountersUi.Counters;
 using DotnetCountersUi.Extensions;
@@ -45,7 +47,7 @@ public class CounterGraphViewModel : ReactiveObject
         
         RemoveCounter = ReactiveCommand.Create((AddedCounterViewModel vm) =>
         {
-            vm.Subscription.Dispose();
+            vm.Dispose();
 
             Model.Series.Remove(vm.Series);
             
@@ -73,33 +75,84 @@ public class CounterGraphViewModel : ReactiveObject
             
         Model.Series.Add(series);
         
-        var subscription = counter.Data
-            .ObserveOn(AvaloniaScheduler.Instance)
-            .Subscribe(data =>
-            {
-                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now), data));
-                
-                Model.InvalidatePlot(true);
-            });
-        
-        var vm = new AddedCounterViewModel(counter, series, subscription);
+        var vm = new AddedCounterViewModel(counter, series);
 
         _counters.Add(vm);
     }
 }
 
-public class AddedCounterViewModel : ReactiveObject
+public class AddedCounterViewModel : ReactiveObject, IDisposable
 {
     public ICounter Instance { get; }
     
     public LineSeries Series { get; }
     
-    public IDisposable Subscription { get; }
+    public float Scale
+    {
+        get => _scale;
+        set
+        {
+            if (value <= 0)
+                throw new DataValidationException($"{nameof(Scale)} must be positive");
 
-    public AddedCounterViewModel(ICounter instance, LineSeries series, IDisposable subscription)
+            this.RaiseAndSetIfChanged(ref _scale, value);
+        }
+    }
+
+    private float _scale = 1;
+
+    private readonly CompositeDisposable _disposable = new();
+
+    private readonly ObservableCollection<MeasurePoint> _points = new();
+
+    public AddedCounterViewModel(ICounter instance, LineSeries series)
     {
         Instance = instance;
         Series = series;
-        Subscription = subscription;
+
+        Series.ItemsSource = _points;
+        Series.TrackerFormatString = "X: {Timestamp:T}\nY: {Y}";
+
+        instance.Data
+            .ObserveOn(AvaloniaScheduler.Instance)
+            .Subscribe(data =>
+            {
+                var point = new MeasurePoint(DateTime.Now, data, _scale);
+                _points.Add(point);
+
+                series.PlotModel.InvalidatePlot(true);
+            })
+            .DisposeWith(_disposable);
+
+        this.WhenAnyValue(vm => vm.Scale)
+            .Subscribe(_ =>
+            {
+                _points.Clear();
+            })
+            .DisposeWith(_disposable);
+    }
+
+    public void Dispose()
+    {
+        _disposable.Dispose();
+    }
+}
+
+public class MeasurePoint : IDataPointProvider
+{
+    public MeasurePoint(DateTime timestamp, double y, float scale)
+    {
+        Timestamp = timestamp;
+        Y = y;
+        Scale = scale;
+    }
+
+    public DateTime Timestamp { get; }
+    public double Y { get; }
+    public float Scale { get; }
+
+    public DataPoint GetDataPoint()
+    {
+        return new DataPoint(DateTimeAxis.ToDouble(Timestamp), Y * Scale);
     }
 }
