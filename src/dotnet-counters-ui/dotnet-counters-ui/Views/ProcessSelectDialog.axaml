@@ -10,9 +10,6 @@
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/dcu_ico.ico"
         Title="CountersSelectDialog">
-    <Window.DataContext>
-        <viewModels:ProcessSelectViewModel/>
-    </Window.DataContext>
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:CountersProcessViewModel}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2">

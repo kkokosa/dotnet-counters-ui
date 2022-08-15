@@ -12,6 +12,8 @@ namespace DotnetCountersUi.Views
         public ProcessSelectDialog()
         {
             InitializeComponent();
+
+            DataContext = new ProcessSelectViewModel();
 #if DEBUG
             this.AttachDevTools();
 #endif

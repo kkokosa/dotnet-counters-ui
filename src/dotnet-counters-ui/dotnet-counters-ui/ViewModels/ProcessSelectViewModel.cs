@@ -4,8 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using Avalonia.Controls;
+using DotnetCountersUi.Extensions;
+using DotnetCountersUi.Native;
 using Microsoft.Diagnostics.NETCore.Client;
 using ReactiveUI;
+using Splat;
 
 namespace DotnetCountersUi.ViewModels;
 
@@ -21,14 +24,23 @@ public class ProcessSelectViewModel : ReactiveObject
 
     private CountersProcessViewModel? _selected;
 
-    public IEnumerable<CountersProcessViewModel> ProcessItems =>
+    public IEnumerable<CountersProcessViewModel> ProcessItems { get; }
+
+    public ProcessSelectViewModel(ICommandLineArgsProvider? argsProvider = null)
+    {
+        argsProvider ??= Locator.Current.GetRequiredService<ICommandLineArgsProvider>();
+
+        ProcessItems =
         DiagnosticsClient.GetPublishedProcesses()
             .Select(GetProcessIfRunning)
             .Where(p => p != null)
-            .Select(p => new CountersProcessViewModel(p!));
+            .Select(p =>
+            {
+                argsProvider.TryGetCommandLineArgs(p!.Id, out var args);
 
-    public ProcessSelectViewModel()
-    {
+                return new CountersProcessViewModel(p, args);
+            });
+
         CloseDialog = ReactiveCommand.Create<Window>(window => window.Close(Selected));
     }
 
