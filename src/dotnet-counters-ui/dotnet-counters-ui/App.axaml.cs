@@ -29,6 +29,11 @@ namespace DotnetCountersUi
                     return new LinuxCommandLineArgsProvider();
                 }
 
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    return new MacOsCommandLineArgsProvider();
+                }
+
                 return new DummyCommandLineArgsProvider();
             });
 

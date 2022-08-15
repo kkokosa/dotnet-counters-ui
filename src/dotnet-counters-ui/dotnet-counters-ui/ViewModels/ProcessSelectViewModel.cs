@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using DotnetCountersUi.Extensions;
 using DotnetCountersUi.Native;
@@ -24,22 +25,21 @@ public class ProcessSelectViewModel : ReactiveObject
 
     private CountersProcessViewModel? _selected;
 
-    public IEnumerable<CountersProcessViewModel> ProcessItems { get; }
+    private readonly ObservableAsPropertyHelper<IEnumerable<CountersProcessViewModel>> _processItems;
+    public IEnumerable<CountersProcessViewModel> ProcessItems => _processItems.Value;
+
+    public ReactiveCommand<Unit, IEnumerable<CountersProcessViewModel>> LoadProcesses { get; }
+
+    private readonly ICommandLineArgsProvider _argsProvider;
 
     public ProcessSelectViewModel(ICommandLineArgsProvider? argsProvider = null)
     {
-        argsProvider ??= Locator.Current.GetRequiredService<ICommandLineArgsProvider>();
+        _argsProvider = argsProvider ?? Locator.Current.GetRequiredService<ICommandLineArgsProvider>();
 
-        ProcessItems =
-        DiagnosticsClient.GetPublishedProcesses()
-            .Select(GetProcessIfRunning)
-            .Where(p => p != null)
-            .Select(p =>
-            {
-                argsProvider.TryGetCommandLineArgs(p!.Id, out var args);
+        LoadProcesses = ReactiveCommand.CreateFromTask<Unit, IEnumerable<CountersProcessViewModel>>(
+        async _ => await GetProcesses());
 
-                return new CountersProcessViewModel(p, args);
-            });
+        LoadProcesses.ToProperty(this, vm => vm.ProcessItems, out _processItems);
 
         CloseDialog = ReactiveCommand.Create<Window>(window => window.Close(Selected));
     }
@@ -54,5 +54,24 @@ public class ProcessSelectViewModel : ReactiveObject
         {
             return null;
         }
+    }
+
+    private async Task<List<CountersProcessViewModel>> GetProcesses()
+    {
+        var processes = DiagnosticsClient.GetPublishedProcesses()
+            .Select(GetProcessIfRunning)
+            .Where(p => p != null)
+            .ToArray();
+
+        var output = new List<CountersProcessViewModel>(processes.Length);
+
+        foreach (var process in processes)
+        {
+            var args = await _argsProvider.GetCommandLineArgs(process!.Id);
+            
+            output.Add(new CountersProcessViewModel(process, args));
+        }
+
+        return output;
     }
 }

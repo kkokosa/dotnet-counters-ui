@@ -1,22 +1,15 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DotnetCountersUi.Native;
 
 public class LinuxCommandLineArgsProvider : ICommandLineArgsProvider
 {
-    public bool TryGetCommandLineArgs(int pid, out string[] args)
+    public async Task<string> GetCommandLineArgs(int pid)
     {
-        args = Array.Empty<string>();
-
         var path = $"/proc/{pid}/cmdline";
 
-        if (!File.Exists(path)) return false;
-
-        var input = File.ReadAllText(path);
-
-        args = input.Split('\x00');
-
-        return true;
+        return await File.ReadAllTextAsync(path);
     }
 }

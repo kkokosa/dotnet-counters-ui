@@ -8,6 +8,7 @@
         x:Name="Window"
         Width="400" Height="400"
         WindowStartupLocation="CenterScreen"
+        Opened="TopLevel_OnOpened"
         Icon="/Assets/dcu_ico.ico"
         Title="CountersSelectDialog">
     <Window.DataTemplates>

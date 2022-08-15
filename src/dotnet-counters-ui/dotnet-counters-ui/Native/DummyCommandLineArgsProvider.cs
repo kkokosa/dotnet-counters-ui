@@ -1,12 +1,11 @@
-using System;
+using System.Threading.Tasks;
 
 namespace DotnetCountersUi.Native;
 
 public class DummyCommandLineArgsProvider : ICommandLineArgsProvider
 {
-    public bool TryGetCommandLineArgs(int pid, out string[] args)
+    public Task<string> GetCommandLineArgs(int pid)
     {
-        args = Array.Empty<string>();
-        return true;
+        return Task.FromResult(string.Empty);
     }
 }

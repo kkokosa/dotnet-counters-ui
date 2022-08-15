@@ -28,5 +28,10 @@ namespace DotnetCountersUi.Views
         {
             ((ProcessSelectViewModel) DataContext!).CloseDialog.Execute(this).Subscribe();
         }
+
+        private void TopLevel_OnOpened(object? sender, EventArgs e)
+        {
+            ((ProcessSelectViewModel) DataContext!).LoadProcesses.Execute().Subscribe();
+        }
     }
 }

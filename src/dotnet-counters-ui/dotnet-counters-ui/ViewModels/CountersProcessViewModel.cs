@@ -9,10 +9,10 @@ public class CountersProcessViewModel : ReactiveObject
     public string Name { get; }
     public string Arguments { get; }
 
-    public CountersProcessViewModel(Process p, string[] args)
+    public CountersProcessViewModel(Process p, string args)
     {
         Pid = p.Id;
         Name = p.ProcessName;
-        Arguments = string.Join(' ', args);
+        Arguments = args;
     }
 }
