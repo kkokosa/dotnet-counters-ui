@@ -17,7 +17,7 @@ using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace DotnetCountersUi.ViewModels;
 
-public class CounterGraphViewModel : ReactiveObject
+public class CounterGraphViewModel : ReactiveObject, IDisposable
 {
     public ReadOnlyObservableCollection<AddedCounterViewModel> Counters { get; }
 
@@ -37,7 +37,7 @@ public class CounterGraphViewModel : ReactiveObject
         
         Counters = new ReadOnlyObservableCollection<AddedCounterViewModel>(_counters);
 
-        Model = new PlotModel { Title = "(unnamed)" };
+        Model = new PlotModel();
         
         var dateAxis = new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "HH:mm:ss" };
         
@@ -78,6 +78,17 @@ public class CounterGraphViewModel : ReactiveObject
         var vm = new AddedCounterViewModel(counter, series);
 
         _counters.Add(vm);
+    }
+
+    public void Dispose()
+    {
+        AddCounter.Dispose();
+        RemoveCounter.Dispose();
+
+        foreach (var counter in _counters)
+        {
+            counter.Dispose();
+        }
     }
 }
 

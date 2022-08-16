@@ -12,6 +12,8 @@ public class MainWindowViewModel : ReactiveObject
     
     public ReactiveCommand<Unit, Unit> AddNewGraph { get; }
 
+    public ReactiveCommand<CounterGraphViewModel, Unit> DeleteGraph { get; }
+
     private readonly IDataRouter _dataRouter;
     
     public MainWindowViewModel(IDataRouter? dataRouter = null)
@@ -21,6 +23,12 @@ public class MainWindowViewModel : ReactiveObject
         Graphs = new ObservableCollection<CounterGraphViewModel>();
 
         AddNewGraph = ReactiveCommand.Create(() => Graphs.Add(new CounterGraphViewModel()));
+
+        DeleteGraph = ReactiveCommand.Create((CounterGraphViewModel vm) =>
+        {
+            Graphs.Remove(vm);
+            vm.Dispose();
+        });
     }
 
     public void AttachRouter(int remotePid)
