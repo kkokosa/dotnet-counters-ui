@@ -19,16 +19,16 @@ public partial class GraphToolbox : UserControl
 
     private ICommand? _deleteCommand;
 
-    public object DeleteCommandParameter
+    public object? DeleteCommandParameter
     {
         get => _deleteCommandParameter;
         set => SetAndRaise(DeleteCommandParameterProperty, ref _deleteCommandParameter, value);
     }
     
-    public static readonly StyledProperty<object> DeleteCommandParameterProperty =
-        AvaloniaProperty.Register<GraphToolbox, object>(nameof(DeleteCommandParameter));
+    public static readonly StyledProperty<object?> DeleteCommandParameterProperty =
+        AvaloniaProperty.Register<GraphToolbox, object?>(nameof(DeleteCommandParameter));
 
-    private object _deleteCommandParameter;
+    private object? _deleteCommandParameter;
 
     public GraphToolbox()
     {
