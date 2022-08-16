@@ -14,9 +14,9 @@
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type viewModels:CountersProcessViewModel}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto" Margin="2">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Pid}"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Margin="2,0,2,0" Text="{Binding Name}"/>
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Arguments}"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Pid}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="2,0,2,0" Text="{Binding Name}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Arguments}" />
             </Grid>
         </DataTemplate>
     </Window.DataTemplates>
@@ -31,9 +31,13 @@
                 </Style>
             </ListBox.Styles>
         </ListBox>
-        <Button Command="{Binding CloseDialog}"
-                CommandParameter="{Binding ElementName=Window}"
-                IsEnabled="{Binding Selected, Converter={x:Static ObjectConverters.IsNotNull}}"
-                Grid.Row="1">OK</Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Command="{Binding CloseDialog}"
+                    CommandParameter="{Binding ElementName=Window}"
+                    IsEnabled="{Binding Selected, Converter={x:Static ObjectConverters.IsNotNull}}">
+                OK
+            </Button>
+            <Button Command="{Binding LoadProcesses}">Refresh</Button>
+        </StackPanel>
     </Grid>
 </Window>
