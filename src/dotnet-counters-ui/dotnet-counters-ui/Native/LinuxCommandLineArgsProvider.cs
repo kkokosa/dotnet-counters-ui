@@ -8,8 +8,17 @@ public class LinuxCommandLineArgsProvider : ICommandLineArgsProvider
 {
     public async Task<string> GetCommandLineArgs(int pid)
     {
-        var path = $"/proc/{pid}/cmdline";
+        try
+        {
+            var path = $"/proc/{pid}/cmdline";
 
-        return await File.ReadAllTextAsync(path);
+            return await File.ReadAllTextAsync(path);
+        }
+        catch (Exception e)
+        {
+            await Console.Error.WriteLineAsync(e.ToString());
+
+            return string.Empty;
+        }
     }
 }

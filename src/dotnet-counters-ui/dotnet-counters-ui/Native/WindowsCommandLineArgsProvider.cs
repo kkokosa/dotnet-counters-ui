@@ -8,18 +8,27 @@ public class WindowsCommandLineArgsProvider : ICommandLineArgsProvider
 {
     public async Task<string> GetCommandLineArgs(int pid)
     {
-        var startInfo = new ProcessStartInfo
+        try
         {
-            FileName = "wmic",
-            Arguments = $"process where \"processid='{pid}'\" get commandline",
-            RedirectStandardOutput = true
-        };
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "wmic",
+                Arguments = $"process where \"processid='{pid}'\" get commandline",
+                RedirectStandardOutput = true
+            };
 
-        using var process = Process.Start(startInfo);
-        await process!.WaitForExitAsync();
+            using var process = Process.Start(startInfo);
+            await process!.WaitForExitAsync();
 
-        var output = await process.StandardOutput.ReadToEndAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
 
-        return output.Split(Environment.NewLine)[1];
+            return output.Split(Environment.NewLine)[1];
+        }
+        catch (Exception e)
+        {
+            await Console.Error.WriteLineAsync(e.ToString());
+
+            return string.Empty;
+        }
     }
 }
