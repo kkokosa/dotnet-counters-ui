@@ -11,10 +11,11 @@
     <UserControl.Resources>
         <converters:OxyColorToBrushConverter x:Key="BrushConverter" />
     </UserControl.Resources>
-    <Grid RowDefinitions="Auto, Auto, *">
-        <oxy:PlotView Grid.Row="0" MinHeight="150" Model="{Binding Model}" />
-        <GridSplitter Grid.Row="1" ResizeDirection="Rows" Background="Black" />
-        <Border Grid.Row="2" Padding="12">
+    <Grid RowDefinitions="Auto, Auto, Auto, *">
+        <ContentPresenter Content="{Binding $parent[UserControl].Header}" />
+        <oxy:PlotView Grid.Row="1" MinHeight="150" Model="{Binding Model}" />
+        <GridSplitter Grid.Row="2" ResizeDirection="Rows" Background="Black" />
+        <Border Grid.Row="3" Padding="12">
             <StackPanel>
                 <DataGrid Name="CountersGrid"
                           Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
