@@ -18,31 +18,32 @@
                 <MenuItem Header="_New" Command="{Binding AddNewGraph}" />
             </MenuItem>
         </Menu>
-        <ItemsControl Items="{Binding Graphs}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:CounterGraph DataContext="{Binding Path=.}">
-                        <views:CounterGraph.Header>
-                            <views:GraphToolbox
-                                DeleteCommand="{Binding #Window.DataContext.DeleteGraph}"
-                                DeleteCommandParameter="{Binding .}">
-                                <views:GraphToolbox.Styles>
-                                    <Style Selector="Grid:pointerover Button">
-                                        <Setter Property="Opacity" Value="0.2" />
-                                    </Style>
-                                    <Style Selector="Button">
-                                        <Setter Property="Opacity" Value="0" />
-                                    </Style>
-                                    <Style Selector="Button:pointerover">
-                                        <Setter Property="Opacity" Value="1" />
-                                    </Style>
-                                </views:GraphToolbox.Styles>
-                            </views:GraphToolbox>
-                        </views:CounterGraph.Header>
-                    </views:CounterGraph>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer>
+            <ItemsControl Items="{Binding Graphs}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:CounterGraph DataContext="{Binding Path=.}">
+                            <views:CounterGraph.Header>
+                                <views:GraphToolbox
+                                    DeleteCommand="{Binding #Window.DataContext.DeleteGraph}"
+                                    DeleteCommandParameter="{Binding .}">
+                                    <views:GraphToolbox.Styles>
+                                        <Style Selector="Grid:pointerover Button">
+                                            <Setter Property="Opacity" Value="0.2" />
+                                        </Style>
+                                        <Style Selector="Button">
+                                            <Setter Property="Opacity" Value="0" />
+                                        </Style>
+                                        <Style Selector="Button:pointerover">
+                                            <Setter Property="Opacity" Value="1" />
+                                        </Style>
+                                    </views:GraphToolbox.Styles>
+                                </views:GraphToolbox>
+                            </views:CounterGraph.Header>
+                        </views:CounterGraph>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
-    
 </rxui:ReactiveWindow>
