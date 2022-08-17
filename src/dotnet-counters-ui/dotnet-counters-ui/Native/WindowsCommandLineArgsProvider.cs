@@ -14,7 +14,8 @@ public class WindowsCommandLineArgsProvider : ICommandLineArgsProvider
             {
                 FileName = "wmic",
                 Arguments = $"process where \"processid='{pid}'\" get commandline",
-                RedirectStandardOutput = true
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
             };
 
             using var process = Process.Start(startInfo);

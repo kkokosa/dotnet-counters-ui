@@ -14,7 +14,8 @@ public class MacOsCommandLineArgsProvider : ICommandLineArgsProvider
             {
                 FileName = "/bin/bash",
                 Arguments = $"-c \"/bin/ps -p {pid} -o args=\"",
-                RedirectStandardOutput = true
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
             };
 
             using var process = Process.Start(startInfo);
