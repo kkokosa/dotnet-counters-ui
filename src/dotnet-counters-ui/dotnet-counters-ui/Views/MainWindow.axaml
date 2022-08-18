@@ -6,7 +6,7 @@
                      xmlns:viewModels="clr-namespace:DotnetCountersUi.ViewModels"
                      xmlns:rxui="http://reactiveui.net"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                     d:DataContext="{viewModels:MainWindowViewModel}"
+                     
                      x:Class="DotnetCountersUi.Views.MainWindow"
                      x:Name="Window"
                      WindowStartupLocation="CenterScreen"
@@ -14,36 +14,45 @@
                      Title="dotnet-counters-ui">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Graph">
-                <MenuItem Header="_New" Command="{Binding AddNewGraph}" />
+            <MenuItem Header="_File">
+                <MenuItem Header="_Add graph" Command="{Binding AddNewGraph}" />
+                <MenuItem Header="E_xit" Click="MenuItem_OnClick" />
             </MenuItem>
         </Menu>
         <ScrollViewer>
-            <ItemsControl Items="{Binding Graphs}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <views:CounterGraph DataContext="{Binding Path=.}">
-                            <views:CounterGraph.Header>
-                                <views:GraphToolbox
-                                    DeleteCommand="{Binding #Window.DataContext.DeleteGraph}"
-                                    DeleteCommandParameter="{Binding .}">
-                                    <views:GraphToolbox.Styles>
-                                        <Style Selector="Grid:pointerover Button">
-                                            <Setter Property="Opacity" Value="0.2" />
-                                        </Style>
-                                        <Style Selector="Button">
-                                            <Setter Property="Opacity" Value="0" />
-                                        </Style>
-                                        <Style Selector="Button:pointerover">
-                                            <Setter Property="Opacity" Value="1" />
-                                        </Style>
-                                    </views:GraphToolbox.Styles>
-                                </views:GraphToolbox>
-                            </views:CounterGraph.Header>
-                        </views:CounterGraph>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid RowDefinitions="Auto, Auto">
+                <ItemsControl Items="{Binding Graphs}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:CounterGraph DataContext="{Binding Path=.}">
+                                <views:CounterGraph.Header>
+                                    <views:GraphToolbox
+                                        DeleteCommand="{Binding #Window.DataContext.DeleteGraph}"
+                                        DeleteCommandParameter="{Binding .}">
+                                        <views:GraphToolbox.Styles>
+                                            <Style Selector="Grid:pointerover Button">
+                                                <Setter Property="Opacity" Value="0.2" />
+                                            </Style>
+                                            <Style Selector="Button">
+                                                <Setter Property="Opacity" Value="0" />
+                                            </Style>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="Opacity" Value="1" />
+                                            </Style>
+                                        </views:GraphToolbox.Styles>
+                                    </views:GraphToolbox>
+                                </views:CounterGraph.Header>
+                            </views:CounterGraph>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+				<DockPanel Grid.Row="1" Margin="5">
+					<Button Command="{Binding AddNewGraph}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        Add graph...
+                    </Button>
+				</DockPanel>
+            </Grid>
         </ScrollViewer>
     </DockPanel>
 </rxui:ReactiveWindow>

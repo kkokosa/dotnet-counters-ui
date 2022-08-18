@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using DotnetCountersUi.ViewModels;
@@ -54,6 +55,11 @@ namespace DotnetCountersUi.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void MenuItem_OnClick(object? sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using Avalonia;
 using DotnetCountersUi.Extensions;
 using ReactiveUI;
 using Splat;
