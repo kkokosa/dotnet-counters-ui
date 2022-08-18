@@ -56,10 +56,5 @@ namespace DotnetCountersUi.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
-
-        private void MenuItem_OnClick(object? sender, RoutedEventArgs e)
-        {
-            Close();
-        }
     }
 }
