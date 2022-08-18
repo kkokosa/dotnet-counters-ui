@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Avalonia;
+using Avalonia.Controls;
 using DotnetCountersUi.Extensions;
 using ReactiveUI;
 using Splat;
@@ -12,8 +13,10 @@ public class MainWindowViewModel : ReactiveObject
     public ObservableCollection<CounterGraphViewModel> Graphs { get; }
     
     public ReactiveCommand<Unit, Unit> AddNewGraph { get; }
-
+    
     public ReactiveCommand<CounterGraphViewModel, Unit> DeleteGraph { get; }
+
+    public ReactiveCommand<Window, Unit> CloseWindow { get; }
 
     private readonly IDataRouter _dataRouter;
     
@@ -30,6 +33,8 @@ public class MainWindowViewModel : ReactiveObject
             Graphs.Remove(vm);
             vm.Dispose();
         });
+
+        CloseWindow = ReactiveCommand.Create<Window>(window => window.Close());
     }
 
     public void AttachRouter(int remotePid)
