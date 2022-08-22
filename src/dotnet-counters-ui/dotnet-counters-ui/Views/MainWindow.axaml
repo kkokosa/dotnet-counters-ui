@@ -29,7 +29,8 @@
                                 <views:CounterGraph.Header>
                                     <views:GraphToolbox
                                         DeleteCommand="{Binding #Window.DataContext.DeleteGraph}"
-                                        DeleteCommandParameter="{Binding .}">
+                                        DeleteCommandParameter="{Binding .}"
+                                        Text="{Binding Name}">
                                         <views:GraphToolbox.Styles>
                                             <Style Selector="Grid:pointerover Button">
                                                 <Setter Property="Opacity" Value="0.2" />

@@ -24,9 +24,17 @@ public class CounterGraphViewModel : ReactiveObject, IDisposable
     private readonly ObservableCollection<AddedCounterViewModel> _counters = new();
 
     public PlotModel Model { get; }
-    
+
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+    private string _name = "(unnamed)";
+
     public ReactiveCommand<Unit, Unit> AddCounter { get; }
-    
+
     public ReactiveCommand<AddedCounterViewModel, Unit> RemoveCounter { get; }
 
     private readonly IDataRouter _dataRouter;

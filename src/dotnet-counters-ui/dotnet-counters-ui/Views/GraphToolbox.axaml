@@ -7,12 +7,18 @@
              x:Class="DotnetCountersUi.Views.GraphToolbox"
              x:Name="Ctrl">
     <Grid ColumnDefinitions="*,Auto,*">
-        <TextBlock Grid.Column="1" Text="(unnamed)" VerticalAlignment="Center" />
+        <TextBox Name="RenameBox" Grid.Column="1" Text="{Binding #Ctrl.Text}" IsVisible="False"
+                 KeyUp="RenameBox_OnKeyUp" LostFocus="RenameBox_OnLostFocus"/>
+        <TextBlock Name="NameBlock" Grid.Column="1" Text="{Binding #Ctrl.Text}" VerticalAlignment="Center" />
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" Margin="4, 0">
             <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top"
                     Command="{Binding #Ctrl.DeleteCommand}"
                     CommandParameter="{Binding #Ctrl.DeleteCommandParameter}">
                 <PathIcon Data="{StaticResource delete_regular}" />
+            </Button>
+            <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Click="RenameButton_OnClick">
+                <PathIcon Data="{StaticResource rename_regular}" />
             </Button>
         </StackPanel>
     </Grid>
