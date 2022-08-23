@@ -32,19 +32,19 @@ public partial class GraphToolbox : UserControl
 
     private object? _deleteCommandParameter;
 
-    public static readonly DirectProperty<GraphToolbox, string?> TextProperty =
-        AvaloniaProperty.RegisterDirect<GraphToolbox, string?>(
+    public static readonly DirectProperty<GraphToolbox, string> TextProperty =
+        AvaloniaProperty.RegisterDirect<GraphToolbox, string>(
             nameof(Text),
             o => o.Text,
             (o, v) => o.Text = v);
 
-    public string? Text
+    public string Text
     {
         get => _text;
         set => SetAndRaise(TextProperty, ref _text, value);
     }
 
-    private string? _text;
+    private string _text = string.Empty;
 
     private readonly TextBox _renameBox;
     private readonly TextBlock _nameBlock;
@@ -71,8 +71,14 @@ public partial class GraphToolbox : UserControl
     {
         if (e.Key == Key.Enter)
         {
-           SetRenameMode(false);
+            Text = _renameBox.Text;
         }
+        else if (e.Key != Key.Escape)
+        {
+            return;
+        }
+        
+        SetRenameMode(false);
     }
 
     private void RenameBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -85,8 +91,9 @@ public partial class GraphToolbox : UserControl
         if (renameMode)
         {
             _renameBox.Focus();
-            _renameBox.SelectAll();
+            _renameBox.Text = Text;
             _renameBox.CaretIndex = _renameBox.Text.Length;
+            _renameBox.SelectAll();
         }
 
         _nameBlock.IsVisible = !renameMode;

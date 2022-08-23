@@ -8,8 +8,8 @@
              x:Name="Ctrl"
              Padding="30, 0">
     <Grid ColumnDefinitions="25,*,Auto,*,25">
-        <TextBox Name="RenameBox" Grid.Column="2" Text="{Binding #Ctrl.Text}" IsVisible="False"
-                 KeyUp="RenameBox_OnKeyUp" LostFocus="RenameBox_OnLostFocus" MinWidth="25" />
+        <TextBox Name="RenameBox" Grid.Column="2" IsVisible="False" KeyUp="RenameBox_OnKeyUp"
+                 LostFocus="RenameBox_OnLostFocus" MinWidth="25" />
         <TextBlock Name="NameBlock" Grid.Column="2" Text="{Binding #Ctrl.Text}" VerticalAlignment="Center"
                    MinWidth="25" />
         <Button Grid.Column="3" Height="25" Width="25" VerticalAlignment="Top"
