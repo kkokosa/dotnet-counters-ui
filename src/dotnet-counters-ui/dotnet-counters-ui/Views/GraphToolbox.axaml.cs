@@ -85,6 +85,7 @@ public partial class GraphToolbox : UserControl
         if (renameMode)
         {
             _renameBox.Focus();
+            _renameBox.SelectAll();
             _renameBox.CaretIndex = _renameBox.Text.Length;
         }
 
