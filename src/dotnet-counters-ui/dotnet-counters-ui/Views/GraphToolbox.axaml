@@ -5,21 +5,20 @@
              Background="White"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="DotnetCountersUi.Views.GraphToolbox"
-             x:Name="Ctrl">
-    <Grid ColumnDefinitions="*,Auto,*">
-        <TextBox Name="RenameBox" Grid.Column="1" Text="{Binding #Ctrl.Text}" IsVisible="False"
-                 KeyUp="RenameBox_OnKeyUp" LostFocus="RenameBox_OnLostFocus"/>
-        <TextBlock Name="NameBlock" Grid.Column="1" Text="{Binding #Ctrl.Text}" VerticalAlignment="Center" />
-        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" Margin="4, 0">
-            <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top"
-                    Command="{Binding #Ctrl.DeleteCommand}"
-                    CommandParameter="{Binding #Ctrl.DeleteCommandParameter}">
-                <PathIcon Data="{StaticResource delete_regular}" />
-            </Button>
-            <Button Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Top"
-                    Click="RenameButton_OnClick">
-                <PathIcon Data="{StaticResource rename_regular}" />
-            </Button>
-        </StackPanel>
+             x:Name="Ctrl"
+             Padding="30, 0">
+    <Grid ColumnDefinitions="25,*,Auto,*,25">
+        <TextBox Name="RenameBox" Grid.Column="2" Text="{Binding #Ctrl.Text}" IsVisible="False"
+                 KeyUp="RenameBox_OnKeyUp" LostFocus="RenameBox_OnLostFocus" />
+        <TextBlock Name="NameBlock" Grid.Column="2" Text="{Binding #Ctrl.Text}" VerticalAlignment="Center" />
+        <Button Grid.Column="3" Height="25" Width="25" VerticalAlignment="Top"
+                Click="RenameButton_OnClick">
+            <PathIcon Data="{StaticResource rename_regular}" />
+        </Button>
+        <Button Grid.Column="4" Height="25" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Command="{Binding #Ctrl.DeleteCommand}"
+                CommandParameter="{Binding #Ctrl.DeleteCommandParameter}">
+            <PathIcon Data="{StaticResource delete_regular}" />
+        </Button>
     </Grid>
 </UserControl>
