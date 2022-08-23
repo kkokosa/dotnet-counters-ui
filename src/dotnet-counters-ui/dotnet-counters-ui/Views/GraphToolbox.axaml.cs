@@ -82,6 +82,12 @@ public partial class GraphToolbox : UserControl
 
     private void SetRenameMode(bool renameMode)
     {
+        if (renameMode)
+        {
+            _renameBox.Focus();
+            _renameBox.CaretIndex = _renameBox.Text.Length;
+        }
+
         _nameBlock.IsVisible = !renameMode;
         _renameBox.IsVisible = renameMode;
     }
