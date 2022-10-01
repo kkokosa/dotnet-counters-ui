@@ -38,6 +38,13 @@ namespace DotnetCountersUi.Views
 
                 ctx.SetOutput(await dialog.ShowDialog<CounterDescriptorViewModel>(this));
             });
+
+            Interactions.ShowDeleteGraphDialog.RegisterHandler(async ctx =>
+            {
+                var dialog = new DeleteGraphDialog();
+
+                ctx.SetOutput(await dialog.ShowDialog<bool>(this));
+            });
         }
 
         protected override async void OnOpened(EventArgs e)

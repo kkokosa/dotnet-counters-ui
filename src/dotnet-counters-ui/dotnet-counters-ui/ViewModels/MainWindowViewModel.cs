@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using DotnetCountersUi.Extensions;
@@ -28,8 +29,11 @@ public class MainWindowViewModel : ReactiveObject
 
         AddNewGraph = ReactiveCommand.Create(() => Graphs.Add(new CounterGraphViewModel()));
 
-        DeleteGraph = ReactiveCommand.Create((CounterGraphViewModel vm) =>
+        DeleteGraph = ReactiveCommand.CreateFromTask(async (CounterGraphViewModel vm) =>
         {
+            var deleteGraph = await Interactions.ShowDeleteGraphDialog.Handle(this);
+            if (!deleteGraph) return;
+            
             Graphs.Remove(vm);
             vm.Dispose();
         });
