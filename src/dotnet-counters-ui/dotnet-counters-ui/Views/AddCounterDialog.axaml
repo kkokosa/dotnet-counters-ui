@@ -19,7 +19,7 @@
         </DataTemplate>
     </Window.DataTemplates>
     <Grid ColumnDefinitions="*" RowDefinitions="*, Auto" Margin="2">
-        <ListBox Items="{Binding AvailableCounters}"
+        <ListBox ItemsSource="{Binding AvailableCounters}"
                  SelectionMode="Single"
                  SelectedItem="{Binding Selected}"
                  Grid.Row="0">

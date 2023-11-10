@@ -23,14 +23,14 @@ public partial class GraphToolbox : UserControl
 
     public object? DeleteCommandParameter
     {
-        get => _deleteCommandParameter;
-        set => SetAndRaise(DeleteCommandParameterProperty, ref _deleteCommandParameter, value);
+        get => GetValue(DeleteCommandParameterProperty);
+        set => SetValue(DeleteCommandParameterProperty, value);
     }
     
     public static readonly StyledProperty<object?> DeleteCommandParameterProperty =
         AvaloniaProperty.Register<GraphToolbox, object?>(nameof(DeleteCommandParameter));
 
-    private object? _deleteCommandParameter;
+    //private object? _deleteCommandParameter;
 
     public static readonly DirectProperty<GraphToolbox, string> TextProperty =
         AvaloniaProperty.RegisterDirect<GraphToolbox, string>(

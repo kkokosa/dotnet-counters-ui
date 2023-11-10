@@ -18,7 +18,7 @@
         <Border Grid.Row="3" Padding="12">
             <StackPanel>
                 <DataGrid Name="CountersGrid"
-                          Items="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
+                          ItemsSource="{Binding Counters}" AutoGenerateColumns="False" MinHeight="100">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Visible">
                             <DataTemplate DataType="viewModels:AddedCounterViewModel">

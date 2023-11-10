@@ -21,7 +21,7 @@
         </DataTemplate>
     </Window.DataTemplates>
     <Grid ColumnDefinitions="*" RowDefinitions="*, Auto" Margin="2">
-        <ListBox Items="{Binding ProcessItems}"
+        <ListBox ItemsSource="{Binding ProcessItems}"
                  SelectionMode="Single"
                  SelectedItem="{Binding Selected}"
                  Grid.Row="0">

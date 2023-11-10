@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>DotnetCountersUi</RootNamespace>
     <ApplicationIcon>Assets\dcu_ico.ico</ApplicationIcon>
@@ -11,15 +11,17 @@
     <Content Include="Assets\dcu_ico.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.17" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
-    <PackageReference Include="CodingSeb.Avalonia.EventSetter" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.328102" />
-    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.0.1" />
-    <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1" />
-    <PackageReference Include="ReactiveUI" Version="18.2.5" />
+    <PackageReference Include="Avalonia" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
+    <PackageReference Include="CodingSeb.Avalonia.EventSetter" Version="11.0.0-preview3" />
+    <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.452401" />
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.1.6" />
+    <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Avalonia11" />
+    <PackageReference Include="ReactiveUI" Version="19.5.1" />
    </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

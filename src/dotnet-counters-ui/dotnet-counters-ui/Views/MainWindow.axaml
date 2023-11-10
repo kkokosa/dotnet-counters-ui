@@ -22,7 +22,7 @@
         </Menu>
         <ScrollViewer>
             <Grid RowDefinitions="Auto, Auto">
-                <ItemsControl Items="{Binding Graphs}">
+                <ItemsControl ItemsSource="{Binding Graphs}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <views:CounterGraph DataContext="{Binding Path=.}">

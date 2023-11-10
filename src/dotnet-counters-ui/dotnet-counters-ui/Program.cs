@@ -19,6 +19,7 @@ namespace DotnetCountersUi
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .LogToTrace()
+                .WithInterFont()
                 .UseReactiveUI();
     }
 }
